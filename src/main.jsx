@@ -13,10 +13,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="user-management" element={<UserManagement />} />
-          <Route path="admin-management" element={<AdminManagement />} />
-          <Route path="settings" element={<Settings />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/user-management" element={<UserManagement />} />
+          <Route path="/admin-management" element={<AdminManagement />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
     </BrowserRouter>
