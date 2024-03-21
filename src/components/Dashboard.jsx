@@ -1,9 +1,15 @@
+import Header from "./Header";
+import Search from "./Search";
+import Table from "./Table";
+
 function Dashboard() {
-    return (
-        <div className="mt-8 text-green-600 font-bold w-96 inline-block">
-            <h2>Đây là trang Dashboard</h2>
-        </div>
-    );
+  return (
+    <div className="px-10 pt-8 w-full">
+      <Header />
+      <Search />
+      <Table />
+    </div>
+  );
 }
 
-export default Dashboard
+export default Dashboard;

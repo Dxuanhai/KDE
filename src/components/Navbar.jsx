@@ -1,4 +1,4 @@
-import { LayoutDashboard, User , Settings, UserCog } from "lucide-react";
+import { LayoutDashboard, User, Settings, UserCog } from "lucide-react";
 import { Link, Outlet } from "react-router-dom";
 
 const data = [
@@ -6,29 +6,27 @@ const data = [
     id: 1,
     icon: <LayoutDashboard />,
     name: "Dashboard",
-    path: "/dashboard"
+    path: "/",
   },
   {
     id: 2,
     icon: <User />,
     name: "User Management",
-    path: "/user-management"
+    path: "/user-management",
   },
   {
     id: 3,
     icon: <UserCog />,
     name: "Admin Management",
-    path: "/admin-management"
+    path: "/admin-management",
   },
   {
     id: 4,
     icon: <Settings />,
     name: "Settings",
-    path: "/settings"
+    path: "/settings",
   },
 ];
-
-
 
 export default function Navbar() {
   return (
