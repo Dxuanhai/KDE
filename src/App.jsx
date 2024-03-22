@@ -5,6 +5,8 @@ import Dashboard from "./components/Dashboard";
 import UserManagement from "./components/UserManagement";
 import AdminManagement from "./components/AdminManagement";
 import Settings from "./components/Settings";
+import LoginPage from "./components/LoginPage";
+import Register from "./components/Register";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
           <Route path="/user-management" element={<UserManagement />} />
           <Route path="/admin-management" element={<AdminManagement />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
     </BrowserRouter>
