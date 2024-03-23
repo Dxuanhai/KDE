@@ -17,7 +17,7 @@ export default function Header() {
 
       <div className=" w-36  justify-between  mt-5 flex ">
         <div className="bg-white h-10 w-10 ml-10 rounded-md flex relative items-center ">
-          <Bell className="mb-2.5  absolute  ml-2 mt-2" />
+          <Bell className="mb-2.5 text-6xl absolute  ml-2 mt-2" />
         </div>
 
         <div className="">
