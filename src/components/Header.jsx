@@ -50,16 +50,17 @@ export default function Header() {
               <div className="">
                 <a
                   href="#"
-                  className="  block px-4 py-2 hover:bg-gray-100 flex justify-between "
+                  className=" text-blue-700 block px-4 py-2 hover:bg-gray-100 flex justify-between "
                 >
-                  Hồ sơ <CircleUser />
+                  Profile
+                  <CircleUser />
                 </a>
               </div>
               <a
                 href="#"
-                className="block px-4 py-2 hover:bg-gray-100  flex justify-between"
+                className="text-blue-700 block px-4 py-2 hover:bg-gray-100  flex justify-between"
               >
-                Đăng xuất
+                Log out
                 <LogOut />
               </a>
             </div>
