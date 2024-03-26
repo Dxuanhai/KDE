@@ -2,6 +2,7 @@ import { CircleUser, Lock } from "lucide-react"
 import { Link } from "react-router-dom";
 
 const Register = () => {
+    console.log("Register rendering")
     return (
         <div className="register-container flex justify-center items-center min-h-screen w-screen">
             <div className="wrapper bg-slate-800 border rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
@@ -26,7 +27,7 @@ const Register = () => {
                             <Lock className="absolute top-4 right-4 p-1"/>
                         </div>
 
-                        <button className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-[#013CC6] hover:bg-[#013CC6] hover:text-white py-2 transition-colors duration-300" type="submit">Login</button>
+                        <button type="submit" className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-[#013CC6] hover:bg-[#013CC6] hover:text-white py-2 transition-colors duration-300" >Register</button>
                         <div>
                             <span className="m-4">Have account? <Link className="text-[#013CC6]" to={'/login'}>Login</Link> </span>
                         </div>
