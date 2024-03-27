@@ -1,37 +1,46 @@
-import { CircleUser, Lock } from "lucide-react"
+
+import { CircleUser } from "lucide-react"
 import { Link } from "react-router-dom";
+import image from "/src/assets/blue-brush-stroke-banner-design.jpg";
 
 const Register = () => {
+
     console.log("Register rendering")
     return (
-        <div className="register-container flex justify-center items-center min-h-screen w-screen">
-            <div className="wrapper bg-slate-800 border rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
-                <div>
-                    <h1 className="text-4xl text-[#013CC6] font-bold text-center mb-6 ">Register</h1>
-                    <form action="">
-                        <div className="relative my-4">
-                            <input type="email" className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-[#013CC6] focus:outline-none focus:ring-0 focus:text-white focus:border-[#013CC6] focus peer" required placeholder=""/>
-                            <label htmlFor="" className="absolute text-sm text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-[#013CC6] peer-focus:dark:text-[#013CC6] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" >Your email</label>
-                            <CircleUser className="absolute top-4 right-4 p-1"/>
-                        </div>
-
-                        <div className="relative my-4">
-                            <input type="password" className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-[#013CC6] focus:outline-none focus:ring-0 focus:text-white focus:border-[#013CC6] focus peer" required placeholder=""/>
-                            <label htmlFor="" className="absolute text-sm text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-[#013CC6] peer-focus:dark:text-[#013CC6] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" >Your password</label>
-                            <Lock className="absolute top-4 right-4 p-1"/>
-                        </div>
-
-                        <div className="relative my-4">
-                            <input type="password" className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-[#013CC6] focus:outline-none focus:ring-0 focus:text-white focus:border-[#013CC6] focus peer" required placeholder=""/>
-                            <label htmlFor="" className="absolute text-sm text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-[#013CC6] peer-focus:dark:text-[#013CC6] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" >Confirm password</label>
-                            <Lock className="absolute top-4 right-4 p-1"/>
-                        </div>
-
-                        <button type="submit" className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-[#013CC6] hover:bg-[#013CC6] hover:text-white py-2 transition-colors duration-300" >Register</button>
-                        <div>
-                            <span className="m-4">Have account? <Link className="text-[#013CC6]" to={'/login'}>Login</Link> </span>
-                        </div>
-                    </form>
+        <div className="w-full h-screen flex items-start">
+            <div className="relative w-1/2 h-full flex flex-col">
+                <div className="absolute top-[20%] left-[10%] flex flex-col"></div>
+                <img src={image} alt="" className="w-full h-full object-cover shadow-2xl"/>
+            </div>
+            <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col p-20 justify-between">
+                <h1 className="text-[#013CC6] text-5xl font-bold">KDE</h1>
+                <div className="w-full flex flex-col max-w-[500px]">
+                    <div className="w-full flex flex-col mb-2">
+                        <h3 className="text-4xl font-semibold mb-2">Register</h3>
+                        <p className="text-sm mb-2">Welcome Back! Please enter your details</p>
+                    </div>
+                        <form action="">
+                            <div className="w-full flex flex-col">
+                                <div className="relative my-4">
+                                    <input type="email" placeholder="Email" required className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none" />
+                                    <CircleUser className="absolute top-7 right-4"/>
+                                </div>
+                                <div className="relative my-4">
+                                    <input type="password" placeholder="Password" required className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none" />
+                                </div>
+                                <div className="relative my-4">
+                                    <input type="password" placeholder="Confirm Password" required className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none" />
+                                </div>
+                            </div>
+                            <div className="w-full flex flex-col my-4">
+                                <button type="submit" className="w-full h-12 text-white my-2 bg-[#013CC6] border-2 border-white rounded-full p-1 text-center flex items-center justify-center hover:bg-white hover:text-[#013CC6] transition-all hover:border-2 hover:border-[#013CC6]">
+                                    Register
+                                </button>
+                            </div>
+                        </form>
+                </div>
+                <div className="w-full flex items-center justify-center">
+                    <p className="text-sm font-normal text-[#060606]">You have an account? <span className="font-semibold underline underline-offset-2 cursor-pointer"><Link to={'/login'} >Login</Link></span></p>
                 </div>
             </div>
         </div>

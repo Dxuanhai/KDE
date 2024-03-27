@@ -1,23 +1,29 @@
 /* eslint-disable react/prop-types */
 
-import { CircleUser, Lock } from "lucide-react"
+import { CircleUser, Eye } from "lucide-react"
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import image from "/src/assets/blue-brush-stroke-banner.jpg";
 
 const LoginPage = ({onSuccessfulLogin}) => {
+
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
 
-    // useEffect(() => {
-    //     // Kiểm tra trạng thái đăng nhập sau khi tải lại trang
-    //     const isLoggedIn = localStorage.getItem('isLoggedIn');
-    //     if (isLoggedIn === 'true') {
-    //       // Đăng nhập thành công
-    //         onSuccessfulLogin();
-    //     }
-    // }, [onSuccessfulLogin]);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+        setIsTyping(e.target.value !== "");
+    };
+    
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -35,30 +41,49 @@ const LoginPage = ({onSuccessfulLogin}) => {
         }
     };
     return (
-        <div className="login-container flex justify-center items-center min-h-screen w-screen">
-            <div className="wrapper bg-slate-800 border rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
-                <div>
-                    <h1 className="text-4xl text-[#013CC6] font-bold text-center mb-6 ">Login</h1>
+        <div className="login-container w-full h-screen flex items-start">
+            <div className="relative w-1/2 h-full flex flex-col">
+                <div className="absolute top-[20%] left-[10%] flex flex-col"></div>
+                <img src={image} alt="" className="w-full h-full object-cover shadow-2xl"/>
+            </div>
+            <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col p-20 justify-between">
+                <h1 className="text-[#013CC6] text-5xl font-bold">KDE</h1>
+                <div className="w-full flex flex-col max-w-[500px]">
+                    <div className="w-full flex flex-col mb-2">
+                        <h3 className="text-4xl font-semibold mb-2">Login</h3>
+                        <p className="text-sm mb-2">Welcome Back! Please enter your details</p>
+                    </div>
                     <form action="" onSubmit={handleLogin}>
-                        <div className="relative my-4">
-                            <input type="email" value={username} onChange={(e) => setUsername(e.target.value)} className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-[#013CC6] focus:outline-none focus:ring-0 focus:text-white focus:border-[#013CC6] focus peer" required placeholder=""/>
-                            <label htmlFor="" className="absolute text-sm text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-[#013CC6] peer-focus:dark:text-[#013CC6] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" >Your email</label>
-                            <CircleUser className="absolute top-4 right-4 p-1"/>
+                        <div className="w-full flex flex-col">
+                            <div>
+                                    <div className="relative my-4">
+                                        <input type="email" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none" placeholder="Email" required />
+                                        <CircleUser className="absolute top-7 right-4"/>
+                                    </div>
+                                    <div className="relative my-4">
+                                        <input type={showPassword ? "text" : "password"} value={password} onChange={handlePasswordChange}  className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none" placeholder="Password" required  />
+                                        {isTyping && <Eye className="absolute top-7 right-4 cursor-pointer" onClick={togglePasswordVisibility}/>}
+                                    </div>
+                            </div>
                         </div>
-
-                        <div className="relative my-4">
-                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-[#013CC6] focus:outline-none focus:ring-0 focus:text-white focus:border-[#013CC6] focus peer" required placeholder=""/>
-                            <label htmlFor="" className="absolute text-sm text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-[#013CC6] peer-focus:dark:text-[#013CC6] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" >Your password</label>
-                            <Lock className="absolute top-4 right-4 p-1"/>
+                        <div className="w-full flex items-center justify-betwwen">
+                            <div className="w-full flex items-center">
+                                <input type="checkbox" className="w-4 h-4 mr-2"/>
+                                <p className="text-sm">Remember me for 30 days</p>
+                            </div>
+                            <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2">Forgot Password?</p>
                         </div>
-                        
-                        <button type="submit" className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-[#013CC6] hover:bg-[#013CC6] hover:text-white py-2 transition-colors duration-300">Login</button>
-                        <div>
-                            <span className="m-4">New Here? <Link className="text-[#013CC6]" to={'/register'} >Create an Account</Link> </span>
-                            {errorMessage && <p className="text-[#be2f2f] text-sm m-4">{errorMessage}</p>}
+                        <div className="w-full flex flex-col my-4">
+                            <button type="submit" className="w-full h-12 text-white my-2 bg-[#013CC6] border-2 border-white rounded-full p-1 text-center flex items-center justify-center hover:bg-white hover:text-[#013CC6] transition-all hover:border-2 hover:border-[#013CC6]">Login</button>
+                        </div>
+                        <div className="text-center">
                             <p className="text-green-800">user: admin@gmail.com - pass: 1</p>
+                            {errorMessage && <p className="text-[#be2f2f] text-sm m-4">{errorMessage}</p>}
                         </div>
                     </form>
+                </div>
+                <div className="w-full flex items-center justify-center">
+                    <p className="text-sm font-normal text-[#060606]">Dont have an account? <span className="font-semibold underline underline-offset-2 cursor-pointer"><Link to={'/register'} >Register</Link></span></p>
                 </div>
             </div>
         </div>
