@@ -25,7 +25,7 @@ const data = [
     icon: <Settings />,
     name: "Settings",
     path: "/settings",
-  },
+  }
 ];
 
 export default function Navbar() {
