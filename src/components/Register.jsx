@@ -2,9 +2,35 @@
 import { CircleUser } from "lucide-react"
 import { Link } from "react-router-dom";
 import image from "/src/assets/blue-brush-stroke-banner-design.jpg";
+import { useState } from 'react';
 
 const Register = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [message, setMessage] = useState('');
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (password !== confirmPassword) {
+            alert('Mật khẩu không khớp. Vui lòng thử lại.');
+            return;
+        }
+
+        const user = {
+            email,
+            password,
+        };
+
+        localStorage.setItem('user', JSON.stringify(user));
+
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+
+        setMessage('Đăng ký thành công!');
+    };
     console.log("Register rendering")
     return (
         <div className="w-full h-screen flex items-start">
@@ -19,17 +45,17 @@ const Register = () => {
                         <h3 className="text-4xl font-semibold mb-2">Register</h3>
                         <p className="text-sm mb-2">Welcome Back! Please enter your details</p>
                     </div>
-                        <form action="">
+                        <form action="" onSubmit={handleSubmit}>
                             <div className="w-full flex flex-col">
                                 <div className="relative my-4">
-                                    <input type="email" placeholder="Email" required className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none" />
+                                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none" />
                                     <CircleUser className="absolute top-7 right-4"/>
                                 </div>
                                 <div className="relative my-4">
-                                    <input type="password" placeholder="Password" required className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none" />
+                                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none" />
                                 </div>
                                 <div className="relative my-4">
-                                    <input type="password" placeholder="Confirm Password" required className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none" />
+                                    <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none" />
                                 </div>
                             </div>
                             <div className="w-full flex flex-col my-4">
@@ -37,6 +63,7 @@ const Register = () => {
                                     Register
                                 </button>
                             </div>
+                            {message && <div className="message">{message} Chuyển tới trang <span className="font-semibold underline underline-offset-2 cursor-pointer"> <Link to={'/login'} >Đăng nhập</Link> </span></div>}
                         </form>
                 </div>
                 <div className="w-full flex items-center justify-center">

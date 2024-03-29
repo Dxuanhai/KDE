@@ -4,9 +4,9 @@ import { CircleUser, Eye } from "lucide-react"
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import image from "/src/assets/blue-brush-stroke-banner.jpg";
+import axios from "axios";
 
 const LoginPage = ({onSuccessfulLogin}) => {
-
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('');
@@ -23,23 +23,42 @@ const LoginPage = ({onSuccessfulLogin}) => {
         setPassword(e.target.value);
         setIsTyping(e.target.value !== "");
     };
-    
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
     
-        // Kiểm tra logic đăng nhập
-        if (username === 'admin@gmail.com' && password === '1') {
-            
-          // Đăng nhập thành công
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('username', username);
-            onSuccessfulLogin();
-        } else {
-          // Đăng nhập thất bại
-            setErrorMessage('Tên người dùng hoặc mật khẩu không chính xác.');
+        //Kiểm tra logic đăng nhập
+        // const user = JSON.parse(localStorage.getItem('user'));
+        // if (user && user.email === username && user.password === password) {
+        //     // Đăng nhập thành công
+        //     localStorage.setItem('isLoggedIn', 'true');
+        //     onSuccessfulLogin();
+        // } else {
+        //     // Đăng nhập thất bại
+        //     setErrorMessage('Tên người dùng hoặc mật khẩu không chính xác.');
+        // }
+
+        try {
+            // Gọi API đăng nhập
+            const response = await axios.post('https://apikde.vercel.app/api/auth/login', {username, password});
+
+            // Kiểm tra kết quả trả về từ API
+            if (response.data.success) {
+                // Đăng nhập thành công
+                localStorage.setItem('isLoggedIn', 'true');
+                onSuccessfulLogin();
+            } else {
+                // Đăng nhập thất bại
+                setErrorMessage('Tên người dùng hoặc mật khẩu không chính xác.');
+            }
+        } catch (error) {
+            // Xử lý lỗi khi gọi API
+            console.error('Error during login:', error);
+            setErrorMessage('Có lỗi xảy ra khi đăng nhập.');
         }
     };
+
+    
     return (
         <div className="login-container w-full h-screen flex items-start">
             <div className="relative w-1/2 h-full flex flex-col">
