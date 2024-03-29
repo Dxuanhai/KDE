@@ -2,8 +2,10 @@ import { Bell, Search, CircleUser, LogOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export default function Header() {
+  
   const [isOpen, setIsOpen] = useState(false);
   let menuRef = useRef();
+  
   useEffect(() => {
     let handler = (e) => {
       if (!menuRef.current.contains(e.target)) {
@@ -50,7 +52,7 @@ export default function Header() {
               <div className="">
                 <a
                   href="#"
-                  className=" text-blue-700 block px-4 py-2 hover:bg-gray-100 flex justify-between "
+                  className=" text-blue-700 px-4 py-2 hover:bg-gray-100 flex justify-between "
                 >
                   Profile
                   <CircleUser />
@@ -58,7 +60,7 @@ export default function Header() {
               </div>
               <a
                 href="#"
-                className="text-blue-700 block px-4 py-2 hover:bg-gray-100  flex justify-between"
+                className="text-blue-700 px-4 py-2 hover:bg-gray-100  flex justify-between"
               >
                 Log out
                 <LogOut />

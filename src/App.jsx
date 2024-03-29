@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
 import UserManagement from "./components/UserManagement";
@@ -11,6 +11,12 @@ import Register from "./components/Register";
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  //Luu thong tin dang nhap
+  // useEffect(() => {
+  //   const loggedIn = localStorage.getItem('isLoggedIn');
+  //   setIsLoggedIn(loggedIn === 'true');
+  // }, []);
 
   const handleSuccessfulLogin = () => {
     setIsLoggedIn(true)
