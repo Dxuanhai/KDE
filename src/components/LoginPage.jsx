@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import { CircleUser, Eye } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import image from "/src/assets/blue-brush-stroke-banner.jpg";
 import axios from "axios";
@@ -36,43 +36,19 @@ const LoginPage = ({ onSuccessfulLogin }) => {
     //     setErrorMessage('Tên người dùng hoặc mật khẩu không chính xác.');
     // }
 
-    try {
-      // Gọi API đăng nhập
-      const response = await axios.post("https://apikde.vercel.app/api/login", {
-        data: {
-          username,
-          password,
-        },
-      });
+    // Gọi API đăng nhập
+    const response = await axios.post("https://apikde.vercel.app/api/login", {
+      email: username,
+      password,
+    });
 
-      console.log("🚀  / handleLogin  / response:", response);
-
-      // Kiểm tra kết quả trả về từ API
-      if (response.data.success) {
-        // Đăng nhập thành công
-        localStorage.setItem("isLoggedIn", "true");
-        onSuccessfulLogin();
-      } else {
-        // Đăng nhập thất bại
-        setErrorMessage("Tên người dùng hoặc mật khẩu không chính xác.");
-      }
-    } catch (error) {
-      // Xử lý lỗi khi gọi API
-      console.error("Error during login:", error);
-      setErrorMessage("Có lỗi xảy ra khi đăng nhập.");
+    if (response.data?.message) setErrorMessage(response.data.message);
+    else {
+      localStorage.setItem("isLoggedIn", "true");
+      onSuccessfulLogin();
     }
   };
-  useEffect(() => {
-    const res = async () => {
-      const response = await axios.post("https://apikde.vercel.app/api/lg", {
-        email: "musk@gmail.com",
-        password: "123456",
-      });
-      console.log("🚀  / res  / response :", response);
-    };
 
-    res();
-  }, []);
   return (
     <div className="login-container w-full h-screen flex items-start">
       <div className="relative w-1/2 h-full flex flex-col">
@@ -141,9 +117,8 @@ const LoginPage = ({ onSuccessfulLogin }) => {
               </button>
             </div>
             <div className="text-center">
-              <p className="text-green-800">user: admin@gmail.com - pass: 1</p>
               {errorMessage && (
-                <p className="text-[#be2f2f] text-sm m-4">{errorMessage}</p>
+                <p className="text-[#be2f2f] text-lg m-4">{errorMessage}</p>
               )}
             </div>
           </form>
