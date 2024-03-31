@@ -13,10 +13,10 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   //Luu thong tin dang nhap
-  // useEffect(() => {
-  //   const loggedIn = localStorage.getItem('isLoggedIn');
-  //   setIsLoggedIn(loggedIn === 'true');
-  // }, []);
+  useEffect(() => {
+    const loggedIn = localStorage.getItem('isLoggedIn');
+    setIsLoggedIn(loggedIn === 'true');
+  }, []);
 
   const handleSuccessfulLogin = () => {
     setIsLoggedIn(true)
@@ -41,7 +41,7 @@ function App() {
           ) : (
             <>
               <Route path="/login" element={<LoginPage onSuccessfulLogin={handleSuccessfulLogin}/>} />
-              <Route path="/*" element={<Navigate to="/login" />} />
+              <Route path="/*" element={<Navigate to="/login" replace/>} />
             </>
           )}
           <Route path="/register" element={<Register />} />

@@ -25,17 +25,6 @@ const LoginPage = ({ onSuccessfulLogin }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    //Kiểm tra logic đăng nhập
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // if (user && user.email === username && user.password === password) {
-    //     // Đăng nhập thành công
-    //     localStorage.setItem('isLoggedIn', 'true');
-    //     onSuccessfulLogin();
-    // } else {
-    //     // Đăng nhập thất bại
-    //     setErrorMessage('Tên người dùng hoặc mật khẩu không chính xác.');
-    // }
-
     // Gọi API đăng nhập
     const response = await axios.post("https://apikde.vercel.app/api/login", {
       email: username,

@@ -1,11 +1,30 @@
 import { Bell, Search, CircleUser, LogOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+
 export default function Header() {
   
   const [isOpen, setIsOpen] = useState(false);
   let menuRef = useRef();
-  
+
+  const handleLogout = () => {
+    // Xóa dữ liệu người dùng khỏi lưu trữ cục bộ
+    localStorage.removeItem('user');
+    localStorage.removeItem('isLoggedIn');
+
+    // Tùy chọn, gửi yêu cầu đăng xuất đến backend (nếu có)
+    // fetch('/api/logout')
+    //   .then(() => {
+    //     // Xử lý đăng xuất thành công trên phía máy chủ
+    //   })
+    //   .catch((error) => {
+    //     console.error('Lỗi khi đăng xuất:', error);
+    //   });
+
+    // Chuyển hướng đến trang đăng nhập
+    window.location.href = '/login'; // Thay thế bằng URL trang đăng nhập của bạn
+  };
+
   useEffect(() => {
     let handler = (e) => {
       if (!menuRef.current.contains(e.target)) {
@@ -17,7 +36,7 @@ export default function Header() {
       document.removeEventListener("mousedown", handler);
     };
   });
-
+  
   return (
     <div className="h-20 w-full  flex  justify-between ">
       <div className="h-10 w-3/5 my-5 bg-white  rounded-md flex relative items-center text-gray-400">
@@ -59,7 +78,7 @@ export default function Header() {
                 </a>
               </div>
               <a
-                href="#"
+              onClick={handleLogout}
                 className="text-blue-700 px-4 py-2 hover:bg-gray-100  flex justify-between"
               >
                 Log out

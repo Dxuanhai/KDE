@@ -39,7 +39,6 @@ const Register = () => {
                 <img src={image} alt="" className="w-full h-full object-cover shadow-2xl"/>
             </div>
             <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col p-20 justify-between">
-                <h1 className="text-[#013CC6] text-5xl font-bold">KDE</h1>
                 <div className="w-full flex flex-col max-w-[500px]">
                     <div className="w-full flex flex-col mb-2">
                         <h3 className="text-4xl font-semibold mb-2">Register</h3>
