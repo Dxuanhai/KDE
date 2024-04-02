@@ -2,6 +2,8 @@ import DataTable from "react-data-table-component";
 import  React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
+import moment from 'moment';
+
 export default function Table() {
 
   const column = [
@@ -37,21 +39,32 @@ export default function Table() {
       </div>
     }
   ];
+  
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    // Giả định hàm fetchData từ API để lấy dữ liệu
+    const fetchData = async () => {
+      try {
+        // Call API
+        const response = await fetch('https://apikde.vercel.app/api/login');
+        const apiData = await response.json();
+        
+        // Định dạng lại ngày/giờ cho mỗi đối tượng trong mảng dữ liệu
+        const formattedData = apiData.map(item => ({
+          ...item,
+          createdAt: moment(item.createdAt).format('DD/MM/YYYY HH:mm:ss')
+        }));
+        
+        // Cập nhật state với dữ liệu đã định dạng lại
+        setData(formattedData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-  const [ data, setData ] = useState([]);
-  // Gọi API 
-  const getData = async () =>{
-    try {
-        let res = await axios.get("https://apikde.vercel.app/api/login");
-        console.log(res.data);
-        setData(res.data);
-    } catch (error) {
-        console.log(error);
-    }
-}
-  React.useEffect(()=>{
-    getData();
-  },[])
+    // Gọi hàm fetchData khi component được mount
+    fetchData();
+  }, []);
 
   return (
     <div className=" w-full h-auto bg-red-50 mt-10">
