@@ -1,5 +1,6 @@
-import { LayoutDashboard, User, Settings, UserCog } from "lucide-react";
+import { LayoutDashboard, User, Settings, UserCog, Menu, X } from "lucide-react";
 import { Link, Outlet } from "react-router-dom";
+import { useState } from "react";
 
 const data = [
   {
@@ -11,8 +12,8 @@ const data = [
   {
     id: 2,
     icon: <User />,
-    name: "User Management",
-    path: "/user-management",
+    name: "Role",
+    path: "/role",
   },
   {
     id: 3,
@@ -29,18 +30,53 @@ const data = [
 ];
 
 export default function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
-    <div className="pt-16">
-      {data.map((item) => (
-        <Link
-          key={item.id}
-          className="flex gap-4 py-4 hover:opacity-50 cursor-pointer"
-          to={item.path}
+    <div className="pt-16 flex flex-col sm:flex-row">
+      <div className="hidden sm:block">
+        {data.map((item) => (
+          <Link
+            key={item.id}
+            className="flex flex-row gap-4 py-4 hover:opacity-50 cursor-pointer"
+            to={item.path}
+          >
+            <i>{item.icon}</i>
+            <span className=" ">{item.name}</span>
+          </Link>
+        ))}
+      </div>
+      <div className="sm:hidden">
+        <button
+          className="hamburger-menu"
+          onClick={() => {
+            setIsMenuOpen(!isMenuOpen);
+          }}
         >
-          <i>{item.icon}</i>
-          <span className=" ">{item.name}</span>
-        </Link>
-      ))}
+          {isMenuOpen ? <X /> : <Menu />}
+        </button>
+        <div className="mobile-menu">
+          {isMenuOpen && (
+            <ul>
+              {data.map((item) => (
+                <Link
+                  key={item.id}
+                  className="flex flex-row gap-4 py-4 hover:opacity-50 cursor-pointer"
+                  to={item.path}
+                  onClick={handleLinkClick}
+                >
+                  <i>{item.icon}</i>
+                  <span className=" ">{item.name}</span>
+                </Link>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
       <Outlet></Outlet>
     </div>
   );
