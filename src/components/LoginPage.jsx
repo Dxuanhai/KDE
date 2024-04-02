@@ -34,7 +34,7 @@ const LoginPage = ({ onSuccessfulLogin }) => {
     if (response.data?.message) setErrorMessage(response.data.message);
     else {
       localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("userId", response.data.id); 
+      localStorage.setItem("userId", response.data.id);
       onSuccessfulLogin();
     }
   };

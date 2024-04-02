@@ -1,9 +1,8 @@
 import DataTable from "react-data-table-component";
-import  React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
 export default function Table() {
-
   const column = [
     {
       name: "ID",
@@ -32,26 +31,34 @@ export default function Table() {
     },
     {
       name: "ACTIONS",
-      cell: (row) => <div>
-        <button onClick={ ()=> handleDelete(row.id)} className="btn btn-danger"><PiDotsThreeOutlineFill /></button>&nbsp;
-      </div>
-    }
+      cell: (row) => (
+        <div>
+          <button
+            onClick={() => handleDelete(row.id)}
+            className="btn btn-danger"
+          >
+            <PiDotsThreeOutlineFill />
+          </button>
+          &nbsp;
+        </div>
+      ),
+    },
   ];
 
-  const [ data, setData ] = useState([]);
-  // Gọi API 
-  const getData = async () =>{
+  const [data, setData] = useState([]);
+  // Gọi API
+  const getData = async () => {
     try {
-        let res = await axios.get("https://apikde.vercel.app/api/login");
-        console.log(res.data);
-        setData(res.data);
+      let res = await axios.get("https://apikde.vercel.app/api/login");
+      console.log(res.data);
+      setData(res.data);
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-}
-  React.useEffect(()=>{
+  };
+  React.useEffect(() => {
     getData();
-  },[])
+  }, []);
 
   return (
     <div className=" w-full h-auto bg-red-50 mt-10">
