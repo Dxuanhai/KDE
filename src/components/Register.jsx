@@ -3,6 +3,7 @@ import { CircleUser } from "lucide-react"
 import { Link } from "react-router-dom";
 import image from "/src/assets/blue-brush-stroke-banner-design.jpg";
 import { useState } from 'react';
+//import axios from "axios";
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -30,6 +31,39 @@ const Register = () => {
         setConfirmPassword('');
 
         setMessage('Đăng ký thành công!');
+
+        // if (password !== confirmPassword) {
+        //     alert('Mật khẩu không khớp. Vui lòng thử lại.');
+        //     return;
+        // }
+        
+        // const user = {
+        //     email,
+        //     password,
+        // };
+        
+        // Gọi API để đăng ký
+        // axios.post('https://apikde.vercel.app/api/register', user)
+        // .then(response => {
+        //     const data = response.data;
+        //     if (data.success) {
+        //         // Lưu thông tin người dùng vào localStorage
+        //         localStorage.setItem('user', JSON.stringify(user));
+        
+        //         setEmail('');
+        //         setPassword('');
+        //         setConfirmPassword('');
+        
+        //         setMessage('Đăng ký thành công!');
+        //     } else {
+        //         // Xử lý lỗi từ server
+        //         setMessage(data.message);
+        //     }
+        // })
+        // .catch((error) => {
+        //     // Xử lý lỗi mạng
+        //     console.error('Error:', error);
+        // });        
     };
     console.log("Register rendering")
     return (
