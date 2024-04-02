@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
+import { Button } from "./ui/button";
 
 export default function Search() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,50 +36,16 @@ export default function Search() {
   };
 
   return (
-    <div className="w-full">
-      <h2 className="font-bold text-3xl mb-4">User</h2>
+    <div className="w-full flex justify-between my-8">
+      <h2 className="font-bold text-3xl mb-4 text-[#013CC6]">PROFILE</h2>
 
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-        <div className="flex flex-col w-1/3">
-          <label htmlFor="id-input" className="text-black">
-            ID
-          </label>
-          <input
-            type="text"
-            id="id-input"
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-            placeholder="Search by Id..."
-          />
-        </div>
-        <div className="flex flex-col w-1/3">
-          <label htmlFor="email-input" className="text-black">
-            Email
-          </label>
-          <input
-            type="text"
-            id="email-input"
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-            placeholder="Search by Email..."
-          />
-        </div>
-        <div className="flex flex-col w-1/3">
-          <label htmlFor="select-input" className="text-black">
-            Select
-          </label>
-          <select className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
-            <option value="option1">xếp theo ngày tạo trễ nhất</option>
-            <option value="option2">tên A - Z</option>
-          </select>
-        </div>
-        <div className="flex flex-col w-1/6">
-          <button
-            className="w-full p-2 mt-4 bg-white text-black rounded-md border border-black focus:outline-none"
-            onClick={handleAddUser}
-          >
-            ADD USER
-          </button>
-        </div>
-      </div>
+      <Button
+        className=" py-4 px-6 mt-4"
+        onClick={handleAddUser}
+        variant="secondary"
+      >
+        ADD PROFILE
+      </Button>
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="modal bg-white p-4 rounded-md w-1/3">

@@ -1,11 +1,10 @@
 import DataTable from "react-data-table-component";
-import  React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
-import moment from 'moment';
+import moment from "moment";
 
 export default function Table() {
-
   const column = [
     {
       name: "ID",
@@ -34,31 +33,39 @@ export default function Table() {
     },
     {
       name: "ACTIONS",
-      cell: (row) => <div>
-        <button onClick={ ()=> handleDelete(row.id)} className="btn btn-danger"><PiDotsThreeOutlineFill /></button>&nbsp;
-      </div>
-    }
+      cell: (row) => (
+        <div>
+          <button
+            onClick={() => handleDelete(row.id)}
+            className="btn btn-danger"
+          >
+            <PiDotsThreeOutlineFill />
+          </button>
+          &nbsp;
+        </div>
+      ),
+    },
   ];
-  
+
   const [data, setData] = useState([]);
   useEffect(() => {
     // Giả định hàm fetchData từ API để lấy dữ liệu
     const fetchData = async () => {
       try {
         // Call API
-        const response = await fetch('https://apikde.vercel.app/api/login');
+        const response = await fetch("https://apikde.vercel.app/api/login");
         const apiData = await response.json();
-        
+
         // Định dạng lại ngày/giờ cho mỗi đối tượng trong mảng dữ liệu
-        const formattedData = apiData.map(item => ({
+        const formattedData = apiData.map((item) => ({
           ...item,
-          createdAt: moment(item.createdAt).format('DD/MM/YYYY HH:mm:ss')
+          createdAt: moment(item.createdAt).format("DD/MM/YYYY"),
         }));
-        
+
         // Cập nhật state với dữ liệu đã định dạng lại
         setData(formattedData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
