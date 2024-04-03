@@ -11,17 +11,6 @@ export default function Header() {
     // Xóa dữ liệu người dùng khỏi lưu trữ cục bộ
     localStorage.removeItem('user');
     localStorage.removeItem('isLoggedIn');
-
-    // Tùy chọn, gửi yêu cầu đăng xuất đến backend (nếu có)
-    // fetch('/api/logout')
-    //   .then(() => {
-    //     // Xử lý đăng xuất thành công trên phía máy chủ
-    //   })
-    //   .catch((error) => {
-    //     console.error('Lỗi khi đăng xuất:', error);
-    //   });
-
-    // Chuyển hướng đến trang đăng nhập
     window.location.href = '/login'; // Thay thế bằng URL trang đăng nhập của bạn
   };
 
@@ -66,20 +55,21 @@ export default function Header() {
           {isOpen && (
             <div
               // ref={menuRef}
-              className="bg-white absolute  py-1 right-0   w-36   "
+              className="bg-white absolute  py-1 right-0   w-36 rounded-sm  "
             >
               <div className="">
                 <a
                   href="#"
-                  className=" text-blue-700 px-4 py-2 hover:bg-gray-100 flex justify-between "
+                  className="text-black px-4 py-2 hover:bg-gray-100 flex justify-between "
                 >
                   Profile
                   <CircleUser />
                 </a>
               </div>
               <a
-              onClick={handleLogout}
-                className="text-blue-700 px-4 py-2 hover:bg-gray-100  flex justify-between"
+                onClick={handleLogout}
+                href="#"
+                className="text-black px-4 py-2 hover:bg-gray-100  flex justify-between"
               >
                 Log out
                 <LogOut />
