@@ -8,7 +8,8 @@ export default function Search() {
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [gender, setGender] = useState("");
+  const [genders, setGenders] = useState("");
+  const [genderOptions, setGenderOptions] = useState([]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -20,21 +21,44 @@ export default function Search() {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    // Xử lý logic khi người dùng gửi thông tin trong form
-    // ...
-    // Sau khi xử lý xong, đóng modal và reset các trường nhập
-    closeModal();
+    const userData = {
+      email: email,
+      fullName: fullName,
+      password: password,
+      confirmPassword: confirmPassword,
+      genders: genders,
+    };
+
+    // Call API to submit form data
+    fetch("https://apikde.vercel.app/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle success response
+        console.log("Form data submitted successfully:", data);
+        closeModal();
+      })
+      .catch((error) => {
+        // Handle error response
+        console.error("Error submitting form data: ", error);
+      });
+
+    // Clear form fields
     setEmail("");
     setFullName("");
     setPassword("");
     setConfirmPassword("");
-    setGender("");
+    setGenders("");
   };
 
   const handleAddUser = () => {
     openModal();
   };
-
   return (
     <div className="w-full flex justify-between my-8">
       <h2 className="font-bold text-3xl mb-4 text-[#013CC6]">PROFILE</h2>
@@ -107,17 +131,22 @@ export default function Search() {
                 />
               </div>
               <div className="flex items-center mb-4">
-                <label htmlFor="gender" className="text-black mr-2 w-24">
-                  Gender
+                <label htmlFor="genders" className="text-black mr-2 w-24">
+                  Genders
                 </label>
                 <select
-                  id="gender"
+                  id="genders"
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
+                  value={genders}
+                  onChange={(e) => setGenders(e.target.value)}
                 >
                   <option value="male">Male</option>
                   <option value="female">Female</option>
+                  {genderOptions.map((option) => (
+                    <option key={option.id} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="flex justify-between">
