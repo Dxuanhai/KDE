@@ -31,7 +31,7 @@ const LoginPage = ({ onSuccessfulLogin }) => {
       password,
     });
 
-    if (response.data?.message) setErrorMessage(response.data.message);
+    if (response.data?.message) setErrorMessage('Tài khoản hoặc mật khẩu không chính xác, vui lòng thử lại!');
     else {
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userId", response.data.id);
@@ -88,15 +88,6 @@ const LoginPage = ({ onSuccessfulLogin }) => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="w-full flex items-center justify-betwwen">
-              <div className="w-full flex items-center">
-                <input type="checkbox" className="w-4 h-4 mr-2" />
-                <p className="text-sm">Remember me for 30 days</p>
-              </div>
-              <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2">
-                Forgot Password?
-              </p>
             </div>
             <div className="w-full flex flex-col my-4">
               <button

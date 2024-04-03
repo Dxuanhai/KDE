@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
 import Role from "./components/Role";
-import AdminManagement from "./components/AdminManagement";
+import Permission from "./components/Permission";
 import Settings from "./components/Settings";
 import LoginPage from "./components/LoginPage";
 import Register from "./components/Register";
@@ -35,8 +35,8 @@ function App() {
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/role" element={<Role />} />
                     <Route
-                      path="/admin-management"
-                      element={<AdminManagement />}
+                      path="/permission"
+                      element={<Permission />}
                     />
                     <Route path="/settings" element={<Settings />} />
                   </Routes>
