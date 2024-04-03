@@ -34,13 +34,14 @@ const LoginPage = ({ onSuccessfulLogin }) => {
     if (response.data?.message) setErrorMessage(response.data.message);
     else {
       localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userId", response.data.id); 
       onSuccessfulLogin();
     }
   };
 
   return (
-    <div className="login-container w-full h-screen flex items-start">
-      <div className="relative w-1/2 h-full flex flex-col">
+    <div className="login-container w-full h-screen flex flex-col md:flex-row items-start">
+      <div className="relative w-full md:w-1/2 h-half md:h-full flex flex-col">
         <div className="absolute top-[20%] left-[10%] flex flex-col"></div>
         <img
           src={image}
@@ -48,7 +49,7 @@ const LoginPage = ({ onSuccessfulLogin }) => {
           className="w-full h-full object-cover shadow-2xl"
         />
       </div>
-      <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col p-20 justify-between">
+      <div className="w-full md:w-1/2 h-half md:h-full bg-[#f5f5f5] flex flex-col p-4 md:p-20 justify-between">
         <div className="w-full flex flex-col max-w-[500px]">
           <div className="w-full flex flex-col mb-2">
             <h3 className="text-4xl font-semibold mb-2">Login</h3>
