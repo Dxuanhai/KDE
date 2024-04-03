@@ -2,6 +2,8 @@ import DataTable from "react-data-table-component";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
+import moment from "moment";
+
 export default function Table() {
   const column = [
     {

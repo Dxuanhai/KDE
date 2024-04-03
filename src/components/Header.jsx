@@ -89,27 +89,17 @@ export default function Header() {
           {isOpen && (
             <div
               // ref={menuRef}
-              className="bg-white absolute  py-1 right-0   w-48  "
+              className="bg-white absolute  py-1 right-0   w-36   "
             >
-              <a href="#" className=" text-blue-700 px-4 py-2 flex ">
-                <div className="">
-                  <span>Id </span> <br />
-                  <span>Email </span>
-                </div>
-                <div className="ml-4">
-                  <span>{userData.id}</span>
-                  <br />
-                  <span>{userData.email.slice(0, 9)}..</span>
-                </div>
-              </a>
-              <a
-                href="#"
-                className=" text-blue-700 px-4 py-2 hover:bg-gray-100 flex justify-between "
-              >
-                Profile
-                <CircleUser />
-              </a>
-
+              <div className="">
+                <a
+                  href="#"
+                  className=" text-blue-700 px-4 py-2 hover:bg-gray-100 flex justify-between "
+                >
+                  Profile
+                  <CircleUser />
+                </a>
+              </div>
               <a
                 onClick={handleLogout}
                 className="text-blue-700 px-4 py-2 hover:bg-gray-100  flex justify-between"

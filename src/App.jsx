@@ -3,7 +3,7 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
-import UserManagement from "./components/UserManagement";
+import Role from "./components/Role";
 import AdminManagement from "./components/AdminManagement";
 import Settings from "./components/Settings";
 import LoginPage from "./components/LoginPage";
@@ -28,11 +28,11 @@ function App() {
         <Routes>
           {isLoggedIn ? (
             <Route path="/*" element={
-              <div className="bg-[#E5E5E5] w-screen h-screen flex">
+              <div className="bg-[#E5E5E5] w-full md:w-screen h-screen md:h-screen flex flex-col md:flex-row">
                 <Sidebar />
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
-                  <Route path="/user-management" element={<UserManagement />} />
+                  <Route path="/role" element={<Role />} />
                   <Route path="/admin-management" element={<AdminManagement />} />
                   <Route path="/settings" element={<Settings />} />
                 </Routes>
@@ -40,8 +40,8 @@ function App() {
             }/>
           ) : (
             <>
-              <Route path="/login" element={<LoginPage onSuccessfulLogin={handleSuccessfulLogin}/>} />
-              <Route path="/*" element={<Navigate to="/login" replace/>} />
+              <Route path="/" element={<LoginPage onSuccessfulLogin={handleSuccessfulLogin}/>} />
+              <Route path="/*" element={<Navigate to="/" replace/>} />
             </>
           )}
           <Route path="/register" element={<Register />} />
