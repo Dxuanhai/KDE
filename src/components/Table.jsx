@@ -1,4 +1,8 @@
 import DataTable from "react-data-table-component";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { PiDotsThreeOutlineFill } from "react-icons/pi";
+import moment from "moment";
 
 export default function Table() {
   const column = [
@@ -9,7 +13,7 @@ export default function Table() {
     },
     {
       name: "NAME",
-      selector: (row) => row.name,
+      selector: (row) => row.fullName,
       sortable: true,
     },
     {
@@ -18,47 +22,45 @@ export default function Table() {
       sortable: true,
     },
     {
-      name: "CREATE AT",
-      selector: (row) => row.create,
+      name: "GENDER",
+      selector: (row) => row.genders,
       sortable: true,
     },
     {
-      name: "GENDER",
-      selector: (row) => row.gender,
+      name: "CREATE AT",
+      selector: (row) => row.createdAt,
       sortable: true,
+    },
+    {
+      name: "ACTIONS",
+      cell: (row) => (
+        <div>
+          <button
+            onClick={() => handleDelete(row.id)}
+            className="btn btn-danger"
+          >
+            <PiDotsThreeOutlineFill />
+          </button>
+          &nbsp;
+        </div>
+      ),
     },
   ];
 
-  const data = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "johnDoe@gmail.com",
-      create: "20 Jan 2008",
-      gender: "Male",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "janeSmith@yahoo.com",
-      create: "15 Feb 2009",
-      gender: "Female",
-    },
-    {
-      id: 3,
-      name: "Alice Johnson",
-      email: "aliceJohnson@hotmail.com",
-      create: "7 Jul 2014",
-      gender: "Other",
-    },
-    {
-      id: 4,
-      name: "Robert Brown",
-      email: "robertbrown@hotmail.com",
-      create: "30 Dec 2012",
-      gender: "Male",
-    },
-  ];
+  const [data, setData] = useState([]);
+  // Gọi API
+  const getData = async () => {
+    try {
+      let res = await axios.get("https://apikde.vercel.app/api/login");
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  React.useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <div className=" w-full h-auto bg-red-50 mt-10">
       <DataTable
@@ -67,6 +69,8 @@ export default function Table() {
         data={data}
         pagination
         selectableRows
+        paginationPerPage={8} // Display 8 rows per page
+        paginationRowsPerPageOptions={[8, 16, 24]} // Set pagination options
       ></DataTable>
     </div>
   );

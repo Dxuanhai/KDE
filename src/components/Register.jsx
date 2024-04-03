@@ -27,29 +27,6 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // if (password !== confirmPassword) {
-        //     alert('Mật khẩu không khớp. Vui lòng thử lại.');
-        //     return;
-        // }
-
-        // const user = {
-        //     email,
-        //     fullName,
-        //     password,
-        //     genders,
-        // };
-
-        // localStorage.setItem('user', JSON.stringify(user));
-
-        // setEmail('');
-        // setFullname('');
-        // setPassword('');
-        // setConfirmPassword('');
-        // setGenders('');
-
-        // setMessage('Đăng ký thành công!');
-
         if (password !== confirmPassword) {
             alert('Mật khẩu không khớp. Vui lòng thử lại.');
             return;
@@ -86,43 +63,7 @@ const Register = () => {
         setMessage('Có lỗi xảy ra. Vui lòng thử lại.');
         });
     };
-
-    // if (password !== confirmPassword) {
-        //     alert('Mật khẩu không khớp. Vui lòng thử lại.');
-        //     return;
-        // }
-        
-        // const user = {
-        //     email,
-        //     fullName,
-        //     password,
-        //     genders,
-        // };
-        
-        //Gọi API để đăng ký
-        // axios.post('https://apikde.vercel.app/api/register', user)
-        // .then(response => {
-        //     const data = response.data;
-        //     if (data.success) {
-        //         // Lưu thông tin người dùng vào localStorage
-        //         localStorage.setItem('user', JSON.stringify(user));
-        
-        //         setEmail('');
-        //         setFullname('');
-        //         setPassword('');
-        //         setConfirmPassword('');
-        //         setGenders('');
-        
-        //         setMessage('Đăng ký thành công!');
-        //     } else {
-        //         // Xử lý lỗi từ server
-        //         setMessage(data.message);
-        //     }
-        // })
-        // .catch((error) => {
-        //     // Xử lý lỗi mạng
-        //     console.error('Error:', error);
-        // }); 
+    
     console.log("Register rendering")
     return (
         <div className="w-full h-screen flex flex-col md:flex-row items-start">

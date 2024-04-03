@@ -18,8 +18,8 @@ const data = [
   {
     id: 3,
     icon: <UserCog />,
-    name: "Admin Management",
-    path: "/admin-management",
+    name: "Permission",
+    path: "/permission",
   },
   {
     id: 4,
