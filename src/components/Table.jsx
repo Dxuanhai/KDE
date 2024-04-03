@@ -48,29 +48,18 @@ export default function Table() {
   ];
 
   const [data, setData] = useState([]);
-  useEffect(() => {
-    // Giả định hàm fetchData từ API để lấy dữ liệu
-    const fetchData = async () => {
-      try {
-        // Call API
-        const response = await fetch("https://apikde.vercel.app/api/login");
-        const apiData = await response.json();
-
-        // Định dạng lại ngày/giờ cho mỗi đối tượng trong mảng dữ liệu
-        const formattedData = apiData.map((item) => ({
-          ...item,
-          createdAt: moment(item.createdAt).format("DD/MM/YYYY"),
-        }));
-
-        // Cập nhật state với dữ liệu đã định dạng lại
-        setData(formattedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    // Gọi hàm fetchData khi component được mount
-    fetchData();
+  // Gọi API
+  const getData = async () => {
+    try {
+      let res = await axios.get("https://apikde.vercel.app/api/login");
+      console.log(res.data);
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  React.useEffect(() => {
+    getData();
   }, []);
 
   return (
