@@ -52,7 +52,6 @@ export default function Table() {
   const getData = async () => {
     try {
       let res = await axios.get("https://apikde.vercel.app/api/login");
-      console.log(res.data);
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -70,6 +69,8 @@ export default function Table() {
         data={data}
         pagination
         selectableRows
+        paginationPerPage={8} // Display 8 rows per page
+        paginationRowsPerPageOptions={[8, 16, 24]} // Set pagination options
       ></DataTable>
     </div>
   );

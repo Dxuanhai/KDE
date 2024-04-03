@@ -1,15 +1,38 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
-import { Button } from "./ui/button";
+import { useState } from "react";
+import axios from "axios";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "./ui/use-toast";
+import { Check } from "lucide-react";
+import { ToastAction } from "./ui/toast";
 
 export default function Search() {
+  const { toast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [genders, setGenders] = useState("");
-  const [genderOptions, setGenderOptions] = useState([]);
+  const [userData, setUserData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    genders: "",
+  });
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -17,52 +40,76 @@ export default function Search() {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setUserData({
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      genders: "",
+    });
   };
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    const userData = {
-      email: email,
-      fullName: fullName,
-      password: password,
-      confirmPassword: confirmPassword,
-      genders: genders,
-    };
-
-    // Call API to submit form data
-    fetch("https://apikde.vercel.app/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle success response
-        console.log("Form data submitted successfully:", data);
-        closeModal();
-      })
-      .catch((error) => {
-        // Handle error response
-        console.error("Error submitting form data: ", error);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (userData.password !== userData.confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Passwords do not match",
+        description:
+          "Please make sure your password and confirmed password are the same.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
 
-    // Clear form fields
-    setEmail("");
-    setFullName("");
-    setPassword("");
-    setConfirmPassword("");
-    setGenders("");
+      const confirmPasswordInput = document.getElementById("confirmPassword");
+      confirmPasswordInput.focus();
+      return;
+    }
+    if (userData.password.length < 6) {
+      toast({
+        variant: "destructive",
+        title: "Password is too short",
+        description: "Please enter a password with at least 6 characters.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+
+      const passwordInput = document.getElementById("password");
+      passwordInput.focus();
+      return;
+    }
+    try {
+      const res = await axios.post(
+        `https://apikde.vercel.app/api/register`,
+        userData
+      );
+      if (res.data) {
+        setUserData(res.data.profile);
+        closeModal();
+        toast({
+          className: "bg-[#60cd18] text-white font-bold",
+          description: (
+            <div className="flex items-center gap-4">
+              <Check />
+              <span>Created new profile successfully</span>
+            </div>
+          ),
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: error instanceof Error ? error.message : "Unknown error",
+
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    }
   };
 
   const handleAddUser = () => {
     openModal();
   };
-  return (
-    <div className="w-full flex justify-between my-8">
-      <h2 className="font-bold text-3xl mb-4 text-[#013CC6]">PROFILE</h2>
 
+  return (
+    <div className="w-full flex justify-end my-8">
       <Button
         className=" py-4 px-6 mt-4"
         onClick={handleAddUser}
@@ -71,110 +118,102 @@ export default function Search() {
         ADD PROFILE
       </Button>
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="modal bg-white p-4 rounded-md w-1/3">
-            <h3 className="text-3xl  font-bold mb-4 ">Thêm người dùng</h3>
-            <form onSubmit={handleFormSubmit}>
-              <div className="flex items-center mb-4">
-                <label htmlFor="email" className="text-black mr-2 w-24">
-                  Email
-                </label>
-                <input
-                  type="text"
-                  id="email"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email..."
-                />
-              </div>
-              <div className="flex items-center mb-4">
-                <label htmlFor="fullname" className="text-black mr-2 w-24">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="fullname"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Full Name..."
-                />
-              </div>
-              <div className="flex items-center mb-4">
-                <label htmlFor="password" className="text-black mr-2 w-24">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password..."
-                />
-              </div>
-              <div className="flex items-center mb-4">
-                <label
-                  htmlFor="confirm-password"
-                  className="text-black mr-2 w-24"
-                >
-                  Confirm Password
-                </label>
-                <input
-                  type="password"
-                  id="confirm-password"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm Password..."
-                />
-              </div>
-              <div className="flex items-center mb-4">
-                <label htmlFor="genders" className="text-black mr-2 w-24">
-                  Genders
-                </label>
-                <select
-                  id="genders"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
-                  value={genders}
-                  onChange={(e) => setGenders(e.target.value)}
-                >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  {genderOptions.map((option) => (
-                    <option key={option.id} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex justify-between">
-                <button
-                  type="button"
-                  className="bg-red-500 text-white rounded-md px-4 py-2"
-                >
-                  Remove
-                </button>
-                <div>
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white rounded-md px-4 py-2"
-                  >
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    className="bg-gray-300 text-black rounded-md px-4 py-2 ml-2"
-                    onClick={closeModal}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </form>
+        <>
+          <div className="fixed inset-0 bg-black/50 z-10" />
+          <div className="fixed inset-0 flex items-center justify-center z-10">
+            <Card className="w-[350px] z-10">
+              <CardHeader>
+                <CardTitle>Profile</CardTitle>
+                <CardDescription>
+                  Create your profile information.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit}>
+                  <div className="grid w-full items-center gap-4">
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="name">Full name</Label>
+                      <Input
+                        id="name"
+                        value={userData.fullName}
+                        placeholder="Enter your name"
+                        onChange={(e) =>
+                          setUserData({ ...userData, fullName: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        value={userData.email}
+                        placeholder="example@gmail.com"
+                        onChange={(e) =>
+                          setUserData({ ...userData, email: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-1.5 ">
+                      <Label htmlFor="password">Password</Label>
+                      <Input
+                        id="password"
+                        placeholder="6 -> 12 characters"
+                        value={userData.password}
+                        onChange={(e) =>
+                          setUserData({ ...userData, password: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-1.5 ">
+                      <Label htmlFor="confirmPassword">Confirm password</Label>
+                      <Input
+                        id="confirmPassword"
+                        placeholder="Confirm your password "
+                        value={userData.confirmPassword}
+                        onChange={(e) =>
+                          setUserData({
+                            ...userData,
+                            confirmPassword: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="Gender">Gender</Label>
+                      <Select
+                        value={userData.genders}
+                        onValueChange={(value) =>
+                          setUserData({ ...userData, genders: value })
+                        }
+                      >
+                        <SelectTrigger id="Gender">
+                          <SelectValue
+                            placeholder="Select"
+                            onSelect={(value) => {
+                              console.log(value);
+                            }}
+                          />
+                        </SelectTrigger>
+                        <SelectContent position="popper">
+                          <SelectItem value="Male">Male</SelectItem>
+                          <SelectItem value="Female">Female</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </form>
+              </CardContent>
+              <CardFooter className="flex justify-between ">
+                <Button variant="outline" onClick={closeModal}>
+                  Cancel
+                </Button>
+                <Button type="submit" onClick={handleSubmit}>
+                  Create
+                </Button>
+              </CardFooter>
+            </Card>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

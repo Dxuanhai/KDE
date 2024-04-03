@@ -1,116 +1,213 @@
-import { Bell, Search, CircleUser, LogOut } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
+import {
+  Bell,
+  Search,
+  Keyboard,
+  LifeBuoy,
+  LogOut,
+  Settings,
+  User,
+  Check,
+} from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "./ui/use-toast";
 
 export default function Header() {
+  const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
+  const [userData, setUserData] = useState({
+    fullName: "",
+    email: "",
+    role: "",
+  });
+
   let menuRef = useRef();
   const userId = localStorage.getItem("userId");
+  const openProfile = async () => {
+    const res = await axios.get(
+      `https://apikde.vercel.app/api/profile/${userId}`
+    );
+    if (res.data) {
+      setUserData({
+        fullName: res.data.profile.fullName,
+        email: res.data.profile.email,
 
-  function proi() {
-    return axios
-
-      .get(`https://apikde.vercel.app/api/profile/${userId}`)
-      .then((response) => {
-        console.log(response.data.profile);
-
-        return response.data.profile;
-      })
-      .catch((error) => {
-        console.error(error);
+        role: res.data.profile.role.role,
       });
-  }
-  proi().then((tt) => {
-    console.log(tt);
-    setUserData(tt);
-  });
-  const [userData, setUserData] = useState({});
-  console.log(userData);
+      setIsOpen(true);
+    }
+  };
 
   const handleLogout = () => {
-    // Xóa dữ liệu người dùng khỏi lưu trữ cục bộ
     localStorage.removeItem("user");
     localStorage.removeItem("isLoggedIn");
 
-    // Tùy chọn, gửi yêu cầu đăng xuất đến backend (nếu có)
-    // fetch('/api/logout')
-    //   .then(() => {
-    //     // Xử lý đăng xuất thành công trên phía máy chủ
-    //   })
-    //   .catch((error) => {
-    //     console.error('Lỗi khi đăng xuất:', error);
-    //   });
-
-    // Chuyển hướng đến trang đăng nhập
-    window.location.href = "/login"; // Thay thế bằng URL trang đăng nhập của bạn
+    window.location.href = "/login";
   };
-
-  useEffect(() => {
-    let handler = (e) => {
-      if (!menuRef.current.contains(e.target)) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put(
+        `https://apikde.vercel.app/api/profile/${userId}`,
+        {
+          fullName: userData.fullName,
+        }
+      );
+      if (res.data) {
+        setUserData(res.data.profile);
         setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => {
-      document.removeEventListener("mousedown", handler);
-    };
-  });
-
-  return (
-    <div className="h-20 w-full  flex  justify-between ">
-      <div className="h-10 w-3/5 my-5 bg-white  rounded-md flex relative items-center text-gray-400">
-        <input
-          type="text"
-          id="email-input"
-          className="px-12 w-full h-full  rounded-md focus:outline-none"
-          placeholder="Search"
-        />
-
-        <Search className=" absolute ml-3  cursor-pointer" />
-      </div>
-
-      <div className="flex-wrap mr-10"></div>
-
-      <div className=" w-24 mt-5 flex justify-between ">
-        <div className="bg-white h-10 w-10  rounded-md flex relative items-center ">
-          <Bell className="mb-2.5  absolute  ml-2 mt-2" />
-        </div>
-
-        <div ref={menuRef} className="relative">
-          <button onClick={() => setIsOpen((prev) => !prev)}>
-            <img
-              className="h-10 w-10  rounded-md"
-              src="https://img.freepik.com/premium-photo/cartoon-game-avatar-logo-gaming-brand_902820-467.jpg"
-              alt=""
-            />
-          </button>
-
-          {isOpen && (
-            <div
-              // ref={menuRef}
-              className="bg-white absolute  py-1 right-0   w-36   "
-            >
-              <div className="">
-                <a
-                  href="#"
-                  className=" text-blue-700 px-4 py-2 hover:bg-gray-100 flex justify-between "
-                >
-                  Profile
-                  <CircleUser />
-                </a>
-              </div>
-              <a
-                onClick={handleLogout}
-                className="text-blue-700 px-4 py-2 hover:bg-gray-100  flex justify-between"
-              >
-                Log out
-                <LogOut />
-              </a>
+        toast({
+          className: "bg-[#60cd18] text-white font-bold",
+          description: (
+            <div className="flex items-center gap-4">
+              <Check />
+              <span>Your profile updated successfully</span>
             </div>
-          )}
+          ),
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  return (
+    <>
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 bg-black/50 z-10" />
+          <div className="fixed inset-0 flex items-center justify-center z-10">
+            <Card className="w-[350px] z-10">
+              <CardHeader>
+                <CardTitle>Profile</CardTitle>
+                <CardDescription>
+                  Update your profile information.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit}>
+                  <div className="grid w-full items-center gap-4">
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="name">Name</Label>
+                      <Input
+                        id="name"
+                        value={userData.fullName}
+                        onChange={(e) =>
+                          setUserData({ ...userData, fullName: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-1.5 pointer-events-none">
+                      <Label htmlFor="email">Email</Label>
+                      <Input id="email" value={userData.email} readOnly />
+                    </div>
+                    <div className="flex flex-col space-y-1.5 pointer-events-none">
+                      <Label htmlFor="role">Role</Label>
+                      <Input
+                        id="role"
+                        placeholder="Name of your project "
+                        value={userData.role}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                </form>
+              </CardContent>
+              <CardFooter className="flex justify-between ">
+                <Button variant="outline" onClick={() => setIsOpen(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit" onClick={handleSubmit}>
+                  Update
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </>
+      )}
+      <div className="h-20 w-full  flex  justify-between ">
+        <div className="h-10 w-3/5 my-5 bg-white  rounded-md flex relative items-center text-gray-400">
+          <input
+            type="text"
+            id="email-input"
+            className="px-12 w-full h-full  rounded-md focus:outline-none"
+            placeholder="Search"
+          />
+
+          <Search className=" absolute ml-3  cursor-pointer" />
+        </div>
+        <div className=" w-24 mt-5 flex justify-between  ">
+          <div className="bg-white h-10 w-10  rounded-md flex relative items-center ">
+            <Bell className="mb-2.5  absolute  ml-2 mt-2 cursor-pointer" />
+          </div>
+
+          <div ref={menuRef} className="relative">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <img
+                  className="h-10 w-10  rounded-md cursor-pointer"
+                  src="https://github.com/shadcn.png"
+                  alt=""
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={() => openProfile()}>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                    <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Keyboard className="mr-2 h-4 w-4" />
+                    <span>Keyboard shortcuts</span>
+                    <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <LifeBuoy className="mr-2 h-4 w-4" />
+                  <span>Support</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleLogout()}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
