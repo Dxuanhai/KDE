@@ -3,6 +3,7 @@ import  React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import moment from 'moment';
+import Dropdown from "./dropdown_table/Dropdown";
 
 export default function Table() {
 
@@ -34,8 +35,9 @@ export default function Table() {
     },
     {
       name: "ACTIONS",
-      cell: (row) => <div>
-        <button onClick={ ()=> handleDelete(row.id)} className="btn btn-danger"><PiDotsThreeOutlineFill /></button>&nbsp;
+      cell: (row) => 
+      <div className="text-center w-14">
+        <Dropdown></Dropdown>
       </div>
     }
   ];
@@ -68,7 +70,7 @@ export default function Table() {
 
   return (
     <div className=" w-full h-auto bg-red-50 mt-10">
-      <DataTable
+      <DataTable w-96 overflow-x-scroll
         columns={column}
         noDataComponent=""
         data={data}
