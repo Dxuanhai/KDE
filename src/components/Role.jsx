@@ -18,7 +18,15 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Check, Ellipsis, Trash2, UserCog } from "lucide-react";
+import {
+  Check,
+  Ellipsis,
+  Mail,
+  ShieldQuestion,
+  Trash2,
+  User,
+  UserCog,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -226,18 +234,28 @@ const Role = () => {
   return (
     <>
       <div className="px-10 pt-8 w-full">
-        <div className="grid grid-cols-[2fr_8fr] h-[200px] w-full">
-          <Avatar className="h-40 w-40">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col gap-1">
-            <span>{currentUser.fullName}</span>
-            <Separator />
-            <span>{currentUser.email}</span>
-            <Separator />
-            <span>{currentUser.role}</span>
-            <Separator />
+        <div className="grid grid-cols-[1fr_9fr] h-[200px] w-full items-center">
+          <div>
+            <Avatar className="h-40 w-40 shadow-[rgba(0,0,15,0.5)_12px_0px_4px_0px] ">
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </div>
+
+          <div className="flex flex-col gap-6 py-2    bg-white -ml-20 pl-24 rounded-br-3xl rounded-tr-3xl shadow-md shadow-white">
+            <div className="-ml-3 flex justify-start gap-x-2 hover:opacity-40  cursor-pointer">
+              <User />:
+              <span className="font-bold"> {currentUser.fullName}</span>
+            </div>
+            <div className=" flex justify-start gap-x-2 hover:opacity-40  cursor-pointer">
+              <Mail />:<span className="font-bold"> {currentUser.email}</span>
+            </div>
+            <div className="-ml-3 flex justify-start gap-x-2 hover:opacity-40  cursor-pointer">
+              <ShieldQuestion />:
+              <span className="font-bold">
+                <Badge className="bg-red-500">{currentUser.role}</Badge>
+              </span>
+            </div>
           </div>
         </div>
 
