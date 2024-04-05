@@ -1,12 +1,9 @@
 import DataTable from "react-data-table-component";
-import  React, { useState, useEffect } from 'react';
-import axios from "axios";
-import { PiDotsThreeOutlineFill } from "react-icons/pi";
+import React, { useState, useEffect } from "react";
 import moment from 'moment';
 import Dropdown from "./dropdown_table/Dropdown";
 
 export default function Table() {
-
   const column = [
     {
       name: "ID",
@@ -39,9 +36,9 @@ export default function Table() {
       <div className="text-center w-14">
         <Dropdown></Dropdown>
       </div>
-    }
+    },
   ];
-  
+
   const [data, setData] = useState([]);
   useEffect(() => {
     // Giả định hàm fetchData từ API để lấy dữ liệu

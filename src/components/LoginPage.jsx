@@ -25,33 +25,23 @@ const LoginPage = ({ onSuccessfulLogin }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    //Kiểm tra logic đăng nhập
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // if (user && user.email === username && user.password === password) {
-    //     // Đăng nhập thành công
-    //     localStorage.setItem('isLoggedIn', 'true');
-    //     onSuccessfulLogin();
-    // } else {
-    //     // Đăng nhập thất bại
-    //     setErrorMessage('Tên người dùng hoặc mật khẩu không chính xác.');
-    // }
-
     // Gọi API đăng nhập
     const response = await axios.post("https://apikde.vercel.app/api/login", {
       email: username,
       password,
     });
 
-    if (response.data?.message) setErrorMessage(response.data.message);
+    if (response.data?.message) setErrorMessage('Tài khoản hoặc mật khẩu không chính xác, vui lòng thử lại!');
     else {
       localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userId", response.data.id);
       onSuccessfulLogin();
     }
   };
 
   return (
-    <div className="login-container w-full h-screen flex items-start">
-      <div className="relative w-1/2 h-full flex flex-col">
+    <div className="login-container w-full h-screen flex flex-col md:flex-row items-start">
+      <div className="relative w-full md:w-1/2 h-half md:h-full flex flex-col">
         <div className="absolute top-[20%] left-[10%] flex flex-col"></div>
         <img
           src={image}
@@ -59,7 +49,7 @@ const LoginPage = ({ onSuccessfulLogin }) => {
           className="w-full h-full object-cover shadow-2xl"
         />
       </div>
-      <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col p-20 justify-between">
+      <div className="w-full md:w-1/2 h-half md:h-full bg-[#f5f5f5] flex flex-col p-4 md:p-20 justify-between">
         <div className="w-full flex flex-col max-w-[500px]">
           <div className="w-full flex flex-col mb-2">
             <h3 className="text-4xl font-semibold mb-2">Login</h3>
@@ -98,15 +88,6 @@ const LoginPage = ({ onSuccessfulLogin }) => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="w-full flex items-center justify-betwwen">
-              <div className="w-full flex items-center">
-                <input type="checkbox" className="w-4 h-4 mr-2" />
-                <p className="text-sm">Remember me for 30 days</p>
-              </div>
-              <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2">
-                Forgot Password?
-              </p>
             </div>
             <div className="w-full flex flex-col my-4">
               <button
