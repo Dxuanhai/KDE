@@ -1,4 +1,11 @@
-import { LayoutDashboard, User, Settings, UserCog, Menu, X } from "lucide-react";
+import {
+  LayoutDashboard,
+  User,
+  Settings,
+  UserCog,
+  Menu,
+  X,
+} from "lucide-react";
 import { Link, Outlet } from "react-router-dom";
 import { useState } from "react";
 
@@ -26,7 +33,7 @@ const data = [
     icon: <Settings />,
     name: "Settings",
     path: "/settings",
-  }
+  },
 ];
 
 export default function Navbar() {
