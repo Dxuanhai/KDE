@@ -69,7 +69,7 @@ export default function Table() {
   }, []);
 
   return (
-    <div className=" w-full h-auto bg-red-50 mt-10">
+    <div className=" w-full overflow-y-auto max-h-80 bg-red-50 mt-10">
       <DataTable w-96 overflow-x-scroll
         columns={column}
         noDataComponent=""
