@@ -147,8 +147,8 @@ export default function Header() {
           </div>
         </>
       )}
-      <div className="md:h-30 w-full  md:w-2/3  xl:w-full  flex  justify-between ">
-        <div className="h-10 w-2/3  md:w-2/3 xl:w-3/5 my-5 bg-white  rounded-md flex relative items-center text-gray-400">
+      <div className="h-30 w-full  flex justify-end flex-col-reverse md:h-20 md:max-xl:w-2/3  md:flex-row md:justify-between md:items-center   ">
+        <div className="h-10 w-full mt-6 bg-white  rounded-md flex relative items-center text-gray-400 md:w-2/3  md:mt-0   xl:w-3/5 ">
           <input
             type="text"
             id="email-input"
@@ -158,7 +158,7 @@ export default function Header() {
 
           <Search className=" absolute ml-3  cursor-pointer" />
         </div>
-        <div className=" w-24 mt-5 flex justify-between  ">
+        <div className=" w-24  h-10   ml-auto  flex  justify-between   ">
           <div className="bg-white h-10 w-10  rounded-md flex relative items-center ">
             <Bell className="mb-2.5  absolute  ml-2 mt-2 cursor-pointer" />
           </div>
@@ -178,7 +178,7 @@ export default function Header() {
                 <DropdownMenuGroup>
                   <DropdownMenuItem onClick={() => openProfile()}>
                     <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
+                    <span>Profile</span> ad
                     <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
