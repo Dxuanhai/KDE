@@ -43,6 +43,7 @@ import { useToast } from "./ui/use-toast";
 
 const Role = () => {
   const { toast } = useToast();
+  const [selectedRoleId, setSelectedRoleId] = useState(null);
   const [roles, setRoles] = useState([]);
   const [permissions, setPermissions] = useState([]);
   const [currentUser, setCurentUser] = useState({
@@ -51,6 +52,7 @@ const Role = () => {
     role: "",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
   const [roleUpdated, setRoleUpdated] = useState(false);
   const [isFormValid, setIsFormValid] = useState(true);
   const [dataRole, setDataRole] = useState({
@@ -76,6 +78,7 @@ const Role = () => {
         console.error("Error fetching roles: ", error);
       }
     };
+
     const fetchRoles = async () => {
       try {
         const response = await axios.get("https://apikde.vercel.app/api/role");
@@ -107,6 +110,7 @@ const Role = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setIsModalUpdateOpen(false)
     setDataRole({
       roleName: "",
       permissions: [],
@@ -138,7 +142,7 @@ const Role = () => {
           </div>
         ),
       });
-      return;
+      return
     }
 
     setIsFormValid(true);
@@ -151,6 +155,7 @@ const Role = () => {
         })),
       };
 
+      console.log(requestData)
       const response = await axios.post(
         "https://apikde.vercel.app/api/role",
         requestData
@@ -186,8 +191,92 @@ const Role = () => {
     }
   };
 
+
+
+
+
+  const handleEditRole = (id) => {
+    setSelectedRoleId(id);
+    setIsModalUpdateOpen(true);
+  }
+
+
+  const handleUpdateRole = async (id) => {
+    if (currentUser.role !== "Admin") {
+      toast({
+        className: "bg-red-500 text-wh  ite font-bold",
+        description: (
+          <div className="flex items-center gap-4">
+            <Trash2 />
+            <span>Only Admin can do</span>
+          </div>
+        ),
+      });
+      return;
+    }
+
+    if (dataRole.roleName.trim() === "") {
+      setIsFormValid(false);
+      toast({
+        className: "bg-red-500 text-white font-bold",
+        description: (
+          <div className="flex items-center gap-4">
+            <Trash2 />
+            <span>Please fill in all the required fields</span>
+          </div>
+        ),
+      });
+      return
+    }
+
+    setIsFormValid(true);
+
+    try {
+      const requestData = {
+        roleName: dataRole.roleName,
+        roleId: id,
+      };
+
+      console.log(requestData)
+      const response = await axios.put(
+        "https://apikde.vercel.app/api/role",requestData,
+      );
+      if (response.data) {
+        closeModal();
+        setDataRole({
+          roleName: "",
+        });
+        setRoleUpdated(!roleUpdated);
+        toast({
+          className: "bg-[#60cd18] text-white font-bold",
+          description: (
+            <div className="flex items-center gap-4">
+              <Check />
+              <span>Updated new role successfully</span>
+            </div>
+          ),
+        });
+      }
+    } catch (error) {
+      console.error("Lỗi khi tạo role:", error);
+      toast({
+        className: "bg-red-500 text-white font-bold",
+        description: (
+          <div className="flex items-center gap-4">
+            <Trash2 />
+            <span>Error updating role. Please try again.</span>
+          </div>
+        ),
+      });
+    }
+  };
+
+
+
+
+
   const confirmDelete = async (id) => {
-    if (currentUser !== "Admin") {
+    if (currentUser.role !== "Admin") {
       toast({
         className: "bg-red-500 text-white font-bold",
         description: (
@@ -200,37 +289,42 @@ const Role = () => {
       return;
     }
 
-    try {
-      const res = await axios.delete("https://apikde.vercel.app/api/role", {
-        data: {
-          id: id,
-        },
-      });
-      if (res.data) {
-        setRoleUpdated(!roleUpdated);
+    if (currentUser.role === "Admin") {
+      try {
+        const res = await axios.delete("https://apikde.vercel.app/api/role", {
+          data: {
+            id: id,
+          }
+        }
+        
+      );
+        if (res.data) {
+          setRoleUpdated(!roleUpdated);
+          toast({
+            className: "bg-[#60cd18] text-white font-bold",
+            description: (
+              <div className="flex items-center gap-4">
+                <Check />
+                <span>Delete the role successfully</span>
+              </div>
+            ),
+          });
+        }
+      } catch (error) {
+        console.log("🚀  / confirmDelete  / error:", error);
         toast({
-          className: "bg-[#60cd18] text-white font-bold",
+          className: "bg-red-500 text-white font-bold",
           description: (
             <div className="flex items-center gap-4">
-              <Check />
-              <span>Delete the role successfully</span>
+              <Trash2 />
+              <span>Error deleted role. Please try again.</span>
             </div>
           ),
         });
       }
-    } catch (error) {
-      console.log("🚀  / confirmDelete  / error:", error);
-      toast({
-        className: "bg-red-500 text-white font-bold",
-        description: (
-          <div className="flex items-center gap-4">
-            <Trash2 />
-            <span>Error deleted role. Please try again.</span>
-          </div>
-        ),
-      });
     }
   };
+
   return (
     <>
       <div className="px-10 pt-8 w-full">
@@ -300,7 +394,10 @@ const Role = () => {
                         <Ellipsis className="cursor-pointer" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-40  ">
-                        <DropdownMenuCheckboxItem className="flex justify-start gap-4 cursor-pointer mb-2">
+                        <DropdownMenuCheckboxItem 
+                          className="flex justify-start gap-4 cursor-pointer mb-2"
+                          onClick={() => handleEditRole(item.id)}
+                        >
                           <UserCog />
                           <span className="font-bold">Edit</span>
                         </DropdownMenuCheckboxItem>
@@ -393,6 +490,51 @@ const Role = () => {
                 </Button>
                 <Button type="submit" onClick={handleCreateRole}>
                   Create
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </>
+      )}
+
+
+
+
+    {isModalUpdateOpen && (
+        <>
+          <div className="fixed inset-0 bg-black/50 z-10" />
+          <div className="fixed inset-0 flex items-center justify-center z-10">
+            <Card className="w-[350px] z-10">
+              <CardHeader>
+                <CardTitle>Role</CardTitle>
+                <CardDescription>Update role</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form>
+                  <div className="grid w-full items-center gap-4">
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="name">Role Name</Label>
+                      <Input
+                        id="roleName"
+                        value={dataRole.roleName}
+                        placeholder="Enter new role name"
+                        onChange={(e) =>
+                          setDataRole({
+                            ...dataRole,
+                            roleName: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                </form>
+              </CardContent>
+              <CardFooter className="flex justify-between ">
+                <Button variant="outline" onClick={closeModal}>
+                  Cancel
+                </Button>
+                <Button type="submit" onClick={() => handleUpdateRole(selectedRoleId)}>
+                  Update
                 </Button>
               </CardFooter>
             </Card>
