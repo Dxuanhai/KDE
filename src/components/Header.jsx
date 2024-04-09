@@ -147,8 +147,8 @@ export default function Header() {
           </div>
         </>
       )}
-      <div className="h-20 w-full  flex  justify-between ">
-        <div className="h-10 w-3/5 my-5 bg-white  rounded-md flex relative items-center text-gray-400">
+      <div className="md:h-30 w-full  md:w-2/3  xl:w-full  flex  justify-between ">
+        <div className="h-10 w-2/3  md:w-2/3 xl:w-3/5 my-5 bg-white  rounded-md flex relative items-center text-gray-400">
           <input
             type="text"
             id="email-input"
@@ -167,7 +167,7 @@ export default function Header() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <img
-                  className="h-10 w-10  rounded-md cursor-pointer"
+                  className="h-10 w-10 rounded-md cursor-pointer"
                   src="https://github.com/shadcn.png"
                   alt=""
                 />

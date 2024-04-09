@@ -59,6 +59,7 @@ const Permission = () => {
     permissionName: "",
     description: "",
   });
+  const [isLoading, setIsLoading] = useState(true);
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
@@ -103,9 +104,13 @@ const Permission = () => {
       }
     };
 
-    fetchPermissons();
-    fetchDescriptions();
-    fetchCurrentUser();
+    const fetchData = async () => {
+      setIsLoading(true);
+      await Promise.all([fetchCurrentUser(), fetchPermissons(), fetchDescriptions()]);
+      setIsLoading(false);
+    };
+
+    fetchData();
   }, [userId, roleUpdated]);
 
   const closeModal = () => {
@@ -329,6 +334,11 @@ const Permission = () => {
 
   return (
     <>
+      {isLoading && (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+      )}
       <div className="px-10 pt-8 w-full">
         <div className="grid grid-cols-[1fr_9fr] h-[200px] w-full items-center">
           <div>

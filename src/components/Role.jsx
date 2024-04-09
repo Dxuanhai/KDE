@@ -36,7 +36,6 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Button } from "./ui/button";
-
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useToast } from "./ui/use-toast";
@@ -46,7 +45,7 @@ const Role = () => {
   const [selectedRoleId, setSelectedRoleId] = useState(null);
   const [roles, setRoles] = useState([]);
   const [permissions, setPermissions] = useState([]);
-  const [currentUser, setCurentUser] = useState({
+  const [currentUser, setCurrentUser] = useState({
     email: "",
     fullName: "",
     role: "",
@@ -59,6 +58,7 @@ const Role = () => {
     roleName: "",
     permissions: [],
   });
+  const [isLoading, setIsLoading] = useState(true);
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const Role = () => {
           `https://apikde.vercel.app/api/profile/${userId}`
         );
         if (response.data) {
-          setCurentUser({
+          setCurrentUser({
             fullName: response.data.profile.fullName,
             email: response.data.profile.email,
             role: response.data.profile.role.role,
@@ -90,7 +90,7 @@ const Role = () => {
       }
     };
 
-    const fetchPermissons = async () => {
+    const fetchPermissions = async () => {
       try {
         const response = await axios.get(
           "https://apikde.vercel.app/api/permission"
@@ -99,13 +99,17 @@ const Role = () => {
           setPermissions(response.data);
         }
       } catch (error) {
-        console.error("Error fetching roles: ", error);
+        console.error("Error fetching permissions: ", error);
       }
     };
 
-    fetchPermissons();
-    fetchRoles();
-    fetchCurrentUser();
+    const fetchData = async () => {
+      setIsLoading(true);
+      await Promise.all([fetchCurrentUser(), fetchRoles(), fetchPermissions()]);
+      setIsLoading(false);
+    };
+
+    fetchData();
   }, [userId, roleUpdated]);
 
   const closeModal = () => {
@@ -327,6 +331,11 @@ const Role = () => {
 
   return (
     <>
+      {isLoading && (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+      )}
       <div className="px-10 pt-8 w-full">
         <div className="grid grid-cols-[1fr_9fr] h-[200px] w-full items-center">
           <div>
