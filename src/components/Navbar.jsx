@@ -44,7 +44,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="pt-16 flex flex-col sm:flex-row">
+    <div className="pt-16 flex flex-col sm:flex-row sticky top-0">
       <div className="hidden sm:block">
         {data.map((item) => (
           <Link
