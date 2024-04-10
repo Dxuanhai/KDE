@@ -455,35 +455,17 @@ const Permission = () => {
                     </div>
                     <div className="flex flex-col space-y-1.5">
                       <Label htmlFor="description">Description</Label>
-                      <div className="grid grid-cols-2 gap-2">
-                        {descriptions.map((descriptions) => (
-                          <div
-                            key={descriptions.id}
-                            className="flex items-center gap-2"
-                          >
-                            <Checkbox
-                              id={`descriptions-${descriptions.id}`}
-                              checked={dataPermission.description === descriptions.description}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
-                                  setDataPermission({
-                                    ...dataPermission,
-                                    description: descriptions.description
-                                  });
-                                } else {
-                                  setDataPermission({
-                                    ...dataPermission,
-                                    description: '',
-                                  });
-                                }
-                              }}
-                            />
-                            <Label htmlFor={`descriptions-${descriptions.id}`}>
-                              {descriptions.description}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
+                      <Input
+                        id="permissionName"
+                        value={dataPermission.description}
+                        placeholder="Enter description name"
+                        onChange={(e) =>
+                          setDataPermission({
+                            ...dataPermission,
+                            description: e.target.value,
+                          })
+                        }
+                      />
                     </div>
                   </div>
                 </form>
@@ -530,32 +512,17 @@ const Permission = () => {
                     </div>
                     <div className="flex flex-col space-y-1.5">
                       <Label htmlFor="description">Description</Label>
-                      <div className="grid grid-cols-2 gap-2">
-                        {descriptions.map((description) => (
-                          <div key={description.id} className="flex items-center gap-2">
-                            <Checkbox
-                              id={`description-${description.id}`}
-                              checked={dataPermission.description === description.description}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
-                                  setDataPermission({
-                                    ...dataPermission,
-                                    description: description.description,
-                                  });
-                                } else {
-                                  setDataPermission({
-                                    ...dataPermission,
-                                    description: '',
-                                  });
-                                }
-                              }}
-                            />
-                            <Label htmlFor={`description-${description.id}`}>
-                              {description.description}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
+                      <Input
+                        id="permissionName"
+                        value={dataPermission.description}
+                        placeholder="Enter new description name"
+                        onChange={(e) =>
+                          setDataPermission({
+                            ...dataPermission,
+                            description: e.target.value,
+                          })
+                        }
+                      />
                     </div>
                   </div>
                 </form>
