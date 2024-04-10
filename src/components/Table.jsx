@@ -1,7 +1,14 @@
 import DataTable from "react-data-table-component";
 import React, { useState, useEffect } from "react";
+import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import moment from 'moment';
-import Dropdown from "./dropdown_table/Dropdown";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 
 export default function Table() {
   const column = [
@@ -32,12 +39,45 @@ export default function Table() {
     },
     {
       name: "ACTIONS",
-      cell: (row) => 
-      <div className="text-center w-14">
-        <Dropdown></Dropdown>
-      </div>
+      cell: (row) => (
+        <div>
+          <button>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <button className="btn btn-danger">
+                <PiDotsThreeOutlineFill />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuCheckboxItem
+                className="flex justify-start gap-4 cursor-pointer mb-2"
+              >
+                <span className="font-bold">User Information</span>
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+              className="flex justify-start gap-4 cursor-pointer mb-2"
+              >
+                <span className="font-bold">Edit User</span>
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+              className="flex justify-start gap-4 cursor-pointer mb-2"
+              >
+                <span className="font-bold">Decentralization</span>
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+              className="flex justify-start gap-4 cursor-pointer mb-2"
+              //onClick={() => confirmDelete(row.id)}
+              >
+                <span className="font-bold">Delete User</span>
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          </button>
+        </div>
+      ),
     },
   ];
+
 
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -73,6 +113,8 @@ export default function Table() {
         data={data}
         pagination
         selectableRows
+        paginationPerPage={8} // Display 8 rows per page
+        paginationRowsPerPageOptions={[8, 16, 24]} // Set pagination options
       ></DataTable>
     </div>
   );
