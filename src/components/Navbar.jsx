@@ -1,4 +1,11 @@
-import { LayoutDashboard, User, Settings, UserCog, Menu, X } from "lucide-react";
+import {
+  LayoutDashboard,
+  User,
+  Settings,
+  UserCog,
+  Menu,
+  X,
+} from "lucide-react";
 import { Link, Outlet } from "react-router-dom";
 import { useState } from "react";
 
@@ -26,7 +33,7 @@ const data = [
     icon: <Settings />,
     name: "Settings",
     path: "/settings",
-  }
+  },
 ];
 
 export default function Navbar() {
@@ -37,7 +44,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="pt-16 flex flex-col sm:flex-row">
+    <div className="pt-16 flex flex-col sm:flex-row sticky top-0">
       <div className="hidden sm:block">
         {data.map((item) => (
           <Link
