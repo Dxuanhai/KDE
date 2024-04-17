@@ -8,9 +8,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Check,
-} from "lucide-react";
 
 import axios from "axios";
 
@@ -26,7 +23,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "./ui/use-toast";
 
 export default function Table() {
 
@@ -78,7 +74,7 @@ export default function Table() {
             
               <DropdownMenuCheckboxItem
               className="flex justify-start gap-4 cursor-pointer mb-2"
-              onClick={() => openEditProfile(row.id)}
+              onClick={() => openEditForm(row)}
               >
                 <span className="font-bold">Edit User</span>
               </DropdownMenuCheckboxItem>
@@ -103,7 +99,6 @@ export default function Table() {
     },
   ];
 
-  const { toast } = useToast();
   const [userEditData, setUserEditData] = useState({
     fullName: "",
     email: "",
@@ -126,49 +121,34 @@ export default function Table() {
     }
   };
 
-  //Edit user profile
-  const [isEditOpen, setEditIsOpen] = useState(false);
-  const openEditProfile = async (row) => {
-    const res = await axios.get(
-      `https://apikde.vercel.app/api/profile/${row}`
+ //edit user
+ const [editingUserId, setEditingUserId] = useState(null);
+const [editedUserData, setEditedUserData] = useState({
+  id: "",
+  fullName: "",
+  email: "",
+  genders: "",
+});
+const openEditForm = (rowData) => {
+  setEditedUserData(rowData);
+  setEditingUserId(rowData.id);
+};
+
+const handleUpdateUser = async () => {
+  try {
+    // Gọi API để cập nhật thông tin người dùng
+    await axios.put(`https://apikde.vercel.app/api/profile/${editedUserData.id}`, editedUserData);
+    // Cập nhật lại danh sách người dùng trong state
+    const updatedData = data.map((user) =>
+      user.id === editedUserData.id ? editedUserData : user
     );
-    if (res.data) {
-      setUserEditData({
-        fullName: res.data.profile.fullName,
-        email: res.data.profile.email,
-        genders: res.data.profile.genders,
-      });
-      setEditIsOpen(true);
-    }
-  };
- 
-  const handleSubmit = async (e, row) => {
-    e.preventDefault();
-    try {
-      const respone = await axios.put(
-        `https://apikde.vercel.app/api/profile/${row.id}`,
-        {
-          fullName: userEditData.fullName,
-          genders: userEditData.genders
-        }
-      );
-      if (respone.data) {
-        setUserEditData(respone.data.profile);
-        setEditIsOpen(false);
-        toast({
-          className: "bg-[#60cd18] text-white font-bold",
-          description: (
-            <div className="flex items-center gap-4">
-              <Check />
-              <span>Updated successfully</span>
-            </div>
-          ),
-        });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    setData(updatedData);
+    // Đóng form chỉnh sửa
+    setEditingUserId(null);
+  } catch (error) {
+    console.error('Error updating user:', error);
+  }
+};
 
 //datatable
   const [data, setData] = useState([]);
@@ -256,54 +236,56 @@ export default function Table() {
         </>
       )}
       
-      {isEditOpen && (
+      {editingUserId && (
         <>
           <div className="fixed inset-0 bg-black/50 z-10" />
           <div className="fixed inset-0 flex items-center justify-center z-10">
-            <Card className="w-[350px] z-10">
-              <CardHeader>
-                <CardTitle>Edit Profile</CardTitle>
+          <Card className="w-[350px] z-10">
+            <CardHeader>
+                <CardTitle>Update Profile</CardTitle>
                 <CardDescription>
                   Update user's information.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit}>
-                  <div className="grid w-full items-center gap-4">
-                    <div className="flex flex-col space-y-1.5">
-                      <Label htmlFor="name">Name</Label>
-                      <Input id="name" 
-                      value={userEditData.fullName} 
-                      onChange={(e) =>
-                          setUserEditData({ ...userEditData, fullName: e.target.value })
-                        } />
-                    </div>
+              <div className="grid w-full items-center gap-4">
+                <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Name</Label>
+                <Input  type="text"
+                    value={editedUserData.fullName}
+                    onChange={(e) =>
+                      setEditedUserData({ ...editedUserData, fullName: e.target.value })
+                    } />
+                </div>
+                
+                <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Email</Label>
+                <Input  type="email"
+                    value={editedUserData.email}
+                    onChange={(e) =>
+                      setEditedUserData({ ...editedUserData, email: e.target.value })
+                    } />
+                </div>
 
-                    <div className="flex flex-col space-y-1.5 pointer-events-none">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" value={userEditData.email} readOnly />
-                    </div>
-
-                    <div className="flex flex-col space-y-1.5">
-                      <Label htmlFor="gender">Gender</Label>
-                      <Input id="gender" 
-                      value={userEditData.genders} 
-                      onChange={(e) =>
-                          setUserEditData({ ...userEditData, genders: e.target.value })
-                        } />
-                    </div>
-                  </div>
-                 </form> 
+                <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Gender</Label>
+                <Input  type="text"
+                    value={editedUserData.genders}
+                    onChange={(e) =>
+                      setEditedUserData({ ...editedUserData, genders: e.target.value })
+                    } />
+                </div>
+              </div>
               </CardContent>
               <CardFooter className="flex justify-between ">
-                <Button variant="outline" onClick={() => setEditIsOpen(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit" onClick={handleSubmit}>
+                <Button onClick={handleUpdateUser}>
                   Update
                 </Button>
+                <Button variant="outline" onClick={() => setEditingUserId(null)}>
+                  Cancel
+                </Button>
               </CardFooter>
-            </Card>
+              </Card>
           </div>
         </>
       )}
