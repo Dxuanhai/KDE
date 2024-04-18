@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Check, Trash2 } from "lucide-react";
+import { Check, CloudFog, Trash2 } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 
 export default function Table() {
@@ -90,7 +90,7 @@ export default function Table() {
                   className="font-bold"
                   onClick={() => openChangeRoleForm(row.id)}
                 >
-                  ChangeRole
+                  Update Role
                 </span>
               </DropdownMenuCheckboxItem>
 
@@ -108,12 +108,6 @@ export default function Table() {
       ),
     },
   ];
-
-  const [userEditData, setUserEditData] = useState({
-    fullName: "",
-    email: "",
-    genders: "",
-  });
   const [reload, setReload] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
@@ -124,6 +118,7 @@ export default function Table() {
     fullName: "",
     email: "",
     genders: "",
+    role: "",
   });
   const [ChangeRoleModal, setChangeRoleModal] = useState(false);
   const [currentUser, setCurrentUser] = useState({
@@ -132,7 +127,9 @@ export default function Table() {
     role: "",
     genders: "",
   });
+
   const [targetUser, setTargetUser] = useState({
+    id: "",
     email: "",
     fullName: "",
     role: "",
@@ -142,40 +139,47 @@ export default function Table() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Giả định hàm fetchData từ API để lấy dữ liệu
+    fetchCurrentUser();
     const fetchData = async () => {
       try {
         // Call API
-        const response = await fetch("https://apikde.vercel.app/api/profile");
-        setData(response.data);
+        const response = await axios.get(
+          "https://apikde.vercel.app/api/profile"
+        );
 
-        // Định dạng lại ngày/giờ cho mỗi đối tượng trong mảng dữ liệu
-        const apiData = await response.json();
-        const formattedData = apiData
-          .map((item) => ({
-            ...item,
-            createdAt: moment(item.createdAt).format("DD/MM/YYYY"),
-          }))
-          .reverse();
+        if (response?.data) {
+          const filteredData = await response?.data?.filter((item) => {
+            return item.id !== parseInt(userId, 10);
+          });
 
-        // Cập nhật state với dữ liệu đã định dạng lại
-        setData(formattedData);
+          const formattedData = await filteredData
+            .map((item) => ({
+              ...item,
+              createdAt: moment(item.createdAt).format("DD/MM/YYYY"),
+            }))
+            .reverse();
+
+          // Cập nhật state với dữ liệu đã định dạng lại
+          setData(formattedData);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     // Gọi hàm fetchData khi component được mount
+
     fetchData();
   }, [reload]);
 
   const openProfile = async (row) => {
     const res = await axios.get(`https://apikde.vercel.app/api/profile/${row}`);
     if (res.data) {
-      setUserEditData({
+      setTargetUser({
         fullName: res.data.profile.fullName,
         email: res.data.profile.email,
         genders: res.data.profile.genders,
+        role: res.data.profile.role.role,
       });
       setIsOpen(true);
     }
@@ -203,8 +207,10 @@ export default function Table() {
       const response = await axios.get(
         `https://apikde.vercel.app/api/profile/${id}`
       );
+
       if (response.data) {
         setTargetUser({
+          id: response.data.profile.id,
           fullName: response.data.profile.fullName,
           email: response.data.profile.email,
           role: response.data.profile.role.role,
@@ -215,15 +221,14 @@ export default function Table() {
       console.error("Error fetching roles: ", error);
     }
   };
-  useEffect(() => {
-    fetchCurrentUser();
-  }, []);
 
   const openEditForm = (rowData) => {
     setEditedUserData(rowData);
     setEditingUserId(rowData.id);
   };
-  const openChangeRoleForm = () => {
+  const openChangeRoleForm = (id) => {
+    fetchTargetUser(id);
+
     setChangeRoleModal(true);
   };
 
@@ -310,8 +315,7 @@ export default function Table() {
   //delete
   const handleDeletePerson = async (id) => {
     await fetchTargetUser(id);
-    if (authorization() === true) return;
-    if (currentUser.email === targetUser.email) {
+    if (currentUser.email === editedUserData.email) {
       toast({
         className: "bg-red-500 text-white font-bold",
         description: (
@@ -321,8 +325,10 @@ export default function Table() {
           </div>
         ),
       });
-      return true;
+      return;
     }
+    if (authorization() === true) return;
+
     try {
       const res = await axios.delete(
         `https://apikde.vercel.app/api/profile/${id}`
@@ -352,7 +358,47 @@ export default function Table() {
       });
     }
   };
+  const handleChangeRole = async () => {
+    if (authorization() === true) return;
+    let roleId = 1;
 
+    if (targetUser.role === "Manager") {
+      roleId = 150006;
+    }
+
+    try {
+      const res = await axios.put(
+        `https://apikde.vercel.app/api/changeRole/${targetUser.id}`,
+        {
+          roleId,
+        }
+      );
+
+      if (res.data) {
+        toast({
+          className: "bg-[#60cd18] text-white font-bold",
+          description: (
+            <div className="flex items-center gap-4">
+              <Check />
+              <span>updated the role successfully</span>
+            </div>
+          ),
+        });
+      }
+      setChangeRoleModal(false);
+    } catch (error) {
+      console.log("🚀  / confirmDelete  / error:", error);
+      toast({
+        className: "bg-red-500 text-white font-bold",
+        description: (
+          <div className="flex items-center gap-4">
+            <Trash2 />
+            <span>Error update role. Please try again.</span>
+          </div>
+        ),
+      });
+    }
+  };
   return (
     <>
       {isOpen && (
@@ -368,15 +414,19 @@ export default function Table() {
                 <div className="grid w-full items-center gap-4">
                   <div className="flex flex-col space-y-1.5 pointer-events-none">
                     <Label htmlFor="name">Name</Label>
-                    <Input id="name" value={userEditData.fullName} readOnly />
+                    <Input id="name" value={targetUser.fullName} readOnly />
                   </div>
                   <div className="flex flex-col space-y-1.5 pointer-events-none">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" value={userEditData.email} readOnly />
+                    <Input id="email" value={targetUser.email} readOnly />
                   </div>
                   <div className="flex flex-col space-y-1.5 pointer-events-none">
                     <Label htmlFor="genders">Gender</Label>
-                    <Input id="email" value={userEditData.genders} readOnly />
+                    <Input id="email" value={targetUser.genders} readOnly />
+                  </div>
+                  <div className="flex flex-col space-y-1.5 pointer-events-none">
+                    <Label htmlFor="genders">Role</Label>
+                    <Input id="email" value={targetUser.role} readOnly />
                   </div>
                 </div>
               </CardContent>
@@ -396,25 +446,41 @@ export default function Table() {
           <div className="fixed inset-0 flex items-center justify-center z-10">
             <Card className="w-[350px] z-10">
               <CardHeader>
-                <CardTitle>Update Role's profile</CardTitle>
+                <CardTitle>Update role</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid w-full items-center gap-4">
-                  <div className="flex flex-col space-y-1.5 pointer-events-none">
-                    <Label htmlFor="name">Name</Label>
-                    <Input id="name" value={userEditData.fullName} readOnly />
-                  </div>
-                  <div className="flex flex-col space-y-1.5 pointer-events-none">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" value={userEditData.email} readOnly />
-                  </div>
-                  <div className="flex flex-col space-y-1.5 pointer-events-none">
-                    <Label htmlFor="genders">Gender</Label>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="name">Role</Label>
+                    <Select
+                      value={targetUser.role}
+                      defaultValue={targetUser.role}
+                      onValueChange={(value) =>
+                        setTargetUser({ ...targetUser, role: value })
+                      }
+                    >
+                      <SelectTrigger id="Gender">
+                        <SelectValue
+                          placeholder="Select"
+                          onSelect={(value) => {
+                            console.log(value);
+                          }}
+                        />
+                      </SelectTrigger>
+                      <SelectContent position="popper">
+                        <SelectItem value="Manager">Manager</SelectItem>
+                        <SelectItem value="User">User</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-end ">
-                <Button variant="outline" onClick={() => setIsOpen(false)}>
+              <CardFooter className="flex justify-between ">
+                <Button onClick={() => handleChangeRole()}>Update</Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setChangeRoleModal(false)}
+                >
                   Cancel
                 </Button>
               </CardFooter>

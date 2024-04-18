@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {
   Bell,
@@ -38,6 +38,7 @@ import { useToast } from "./ui/use-toast";
 export default function Header() {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
+
   const [userData, setUserData] = useState({
     fullName: "",
     email: "",
@@ -93,6 +94,7 @@ export default function Header() {
       console.error(error);
     }
   };
+
   return (
     <>
       {isOpen && (
