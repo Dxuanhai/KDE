@@ -114,7 +114,7 @@ const Role = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setIsModalUpdateOpen(false)
+    setIsModalUpdateOpen(false);
     setDataRole({
       roleName: "",
       permissions: [],
@@ -146,7 +146,7 @@ const Role = () => {
           </div>
         ),
       });
-      return
+      return;
     }
 
     setIsFormValid(true);
@@ -159,7 +159,7 @@ const Role = () => {
         })),
       };
 
-      console.log(requestData)
+      console.log(requestData);
       const response = await axios.post(
         "https://apikde.vercel.app/api/role",
         requestData
@@ -195,15 +195,10 @@ const Role = () => {
     }
   };
 
-
-
-
-
   const handleEditRole = (id) => {
     setSelectedRoleId(id);
     setIsModalUpdateOpen(true);
-  }
-
+  };
 
   const handleUpdateRole = async (id) => {
     if (currentUser.role !== "Admin") {
@@ -230,7 +225,7 @@ const Role = () => {
           </div>
         ),
       });
-      return
+      return;
     }
 
     setIsFormValid(true);
@@ -241,9 +236,10 @@ const Role = () => {
         roleId: id,
       };
 
-      console.log(requestData)
+      console.log(requestData);
       const response = await axios.put(
-        "https://apikde.vercel.app/api/role",requestData,
+        "https://apikde.vercel.app/api/role",
+        requestData
       );
       if (response.data) {
         closeModal();
@@ -275,10 +271,6 @@ const Role = () => {
     }
   };
 
-
-
-
-
   const confirmDelete = async (id) => {
     if (currentUser.role !== "Admin") {
       toast({
@@ -298,10 +290,8 @@ const Role = () => {
         const res = await axios.delete("https://apikde.vercel.app/api/role", {
           data: {
             id: id,
-          }
-        }
-        
-      );
+          },
+        });
         if (res.data) {
           setRoleUpdated(!roleUpdated);
           toast({
@@ -336,7 +326,7 @@ const Role = () => {
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
         </div>
       )}
-      <div className="px-10 pt-8 w-full">
+      <div className="px-10 pt-8 w-full   h-screen">
         <div className="grid grid-cols-[1fr_9fr] h-[200px] w-full items-center">
           <div>
             <Avatar className="h-40 w-40 shadow-[rgba(0,0,15,0.5)_12px_0px_4px_0px] ">
@@ -403,7 +393,7 @@ const Role = () => {
                         <Ellipsis className="cursor-pointer" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-40  ">
-                        <DropdownMenuCheckboxItem 
+                        <DropdownMenuCheckboxItem
                           className="flex justify-start gap-4 cursor-pointer mb-2"
                           onClick={() => handleEditRole(item.id)}
                         >
@@ -506,10 +496,7 @@ const Role = () => {
         </>
       )}
 
-
-
-
-    {isModalUpdateOpen && (
+      {isModalUpdateOpen && (
         <>
           <div className="fixed inset-0 bg-black/50 z-10" />
           <div className="fixed inset-0 flex items-center justify-center z-10">
@@ -542,7 +529,10 @@ const Role = () => {
                 <Button variant="outline" onClick={closeModal}>
                   Cancel
                 </Button>
-                <Button type="submit" onClick={() => handleUpdateRole(selectedRoleId)}>
+                <Button
+                  type="submit"
+                  onClick={() => handleUpdateRole(selectedRoleId)}
+                >
                   Update
                 </Button>
               </CardFooter>

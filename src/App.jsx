@@ -23,21 +23,18 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="h-full">
+      <div className=" h-full ">
         <Routes>
           {isLoggedIn ? (
             <Route
               path="/*"
               element={
-                <div className="bg-[#E5E5E5] w-full md:w-screen h-screen flex flex-col md:flex-row">
+                <div className="bg-[#E5E5E5]  h-full md:w-screen  flex flex-col md:flex-row">
                   <Sidebar />
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/role" element={<Role />} />
-                    <Route
-                      path="/permission"
-                      element={<Permission />}
-                    />
+                    <Route path="/permission" element={<Permission />} />
                     <Route path="/settings" element={<Settings />} />
                   </Routes>
                 </div>
